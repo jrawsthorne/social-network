@@ -5,14 +5,14 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('intelligentweb:server');
+var debug = require('debug')('week-5-mongo:server');
 var http = require('http');
-
+var database= require('../databases/characters')
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3004');
 app.set('port', port);
 
 /**
