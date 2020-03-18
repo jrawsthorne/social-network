@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Character = require('../models/characters');
 
 
-exports.init= function() {
+exports.init = function () {
     // uncomment if you need to drop the database
     //
     // Character.remove({}, function(err) {
