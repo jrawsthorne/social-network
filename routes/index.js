@@ -1,23 +1,54 @@
 const express = require("express");
 const router = express.Router();
-const bodyParser = require("body-parser");
+const passport = require("passport");
 
-const character = require("../controllers/characters");
+const User = require("../models/user");
+
 const initDB = require("../controllers/init");
 initDB.init();
 
-/* GET home page. */
-router.get("/index", function (req, res, next) {
-  res.render("index", { title: "My Form" });
+router.get("/", function (req, res, next) {
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user = { username: req.user.username };
+  res.render("index", { user });
 });
 
-router.post("/index", character.getAge);
-
-/* GET home page. */
-router.get("/insert", function (req, res, next) {
-  res.render("insert", { title: "My Form" });
+router.get('/register', function (req, res) {
+  res.render('register');
 });
 
-router.post("/insert", character.insert);
+router.post('/register', async (req, res, next) => {
+  try {
+    await User.register(new User({ username: req.body.username }), req.body.password);
+    passport.authenticate('local')(req, res, () => res.redirect("/"));
+  } catch (err) {
+    console.log(err)
+    return res.render('register');
+  }
+});
+
+router.get("/login", (req, res, next) => {
+  res.render("login", { user: req.user });
+});
+
+router.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login' }));
+
+router.get('/logout', function (req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
+// router.post("/", character.getAge);
+
+// /* GET home page. */
+// router.get("/insert", function (req, res, next) {
+//   res.render("insert", { title: "My Form" });
+// });
+
+// router.post("/insert", character.insert);
+
+
 
 module.exports = router;
