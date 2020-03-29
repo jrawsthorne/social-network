@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corona Social</title>
+</head>
+<body>
+    <template id="story">
+        <div class="story">
+            <small id="author"></small>
+            <p id="created"></p>
+            <p id="text"></p>
+            <form class="like">
+                <label for="score">Score: </label>
+                <input type="number" max="5" min="0" name="score" value="0">
+                <button type="submit">Like</button>
+            </form>
+            <p id="created"></p>
+        </div>
+    </template>
+    <div id="container">
+        <header>
+            <button id="logout">Logout</button>
+            <ul>
+                <li><a href="/">Stories Wall</a></li>
+                <li><a href="/me">Personal Wall</a></li>
+            </ul>
+        </header>
+        <div id="stories">
+            <!-- <div class="story">
+                <h1>Test story</h1>
+                <small>by user1</small>
+                <p>This is the body</p>
+                <form class="like">
+                    <label for="score">Score: </label>
+                    <input type="number" max="5" min="0" name="score" value="0">
+                    <button type="submit">Like</button>
+                </form>
+            </div>
+            <div class="story">
+                <h1>Test story</h1>
+                <small>by user2</small>
+                <p>This is the body</p>
+                <form class="like">
+                    <label for="score">Score: </label>
+                    <input type="number" max="5" min="0" name="score" value="0">
+                    <button type="submit">Like</button>
+                </form>
+            </div>
+            <div class="story">
+                <h1>Test story</h1>
+                <small>by user3</small>
+                <p>This is the body</p>
+                <form class="like">
+                    <label for="score">Score: </label>
+                    <input type="number" max="5" min="0" name="score" value="0">
+                    <button type="submit">Like</button>
+                </form>
+            </div>
+            <div class="story">
+                <h1>Test story</h1>
+                <small>by user4</small>
+                <p>This is the body</p>
+                <form class="like">
+                    <label for="score">Score: </label>
+                    <input type="number" max="5" min="0" name="score" value="0">
+                    <button type="submit">Like</button>
+                </form>
+            </div> -->
+        </div>
+    </div>
+    <script type="module" src="/js/index.js"></script>
+</body>
+</html>

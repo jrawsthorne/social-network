@@ -16,12 +16,13 @@ passport.deserializeUser(User.deserializeUser());
 
 const index = require("./routes/index");
 const users = require("./routes/users");
+const stories = require("./routes/stories");
 
 const app = express();
 
 // view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "ejs");
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -34,9 +35,29 @@ app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", index);
-app.use("/users", users);
+app.use("/stories", stories);
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/views/index.html`));
+});
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/views/login.html`));
+});
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/views/register.html`));
+});
+app.get('/me', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/views/me.html`));
+});
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/views/404.html`));
+});
+
+// app.use("/", index);
+// app.use("/users", users);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
