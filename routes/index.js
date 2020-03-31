@@ -40,15 +40,4 @@ router.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
-// router.post("/", character.getAge);
-
-// /* GET home page. */
-// router.get("/insert", function (req, res, next) {
-//   res.render("insert", { title: "My Form" });
-// });
-
-// router.post("/insert", character.insert);
-
-
-
 module.exports = router;

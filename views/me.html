@@ -4,46 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corona Social</title>
-</head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+   </head>
 <body>
-    <div id="container">
+    <div class="container" id="container">
         <header>
-            <button id="logout">Logout</button>
-            <ul>
-                <li><a href="/">Stories Wall</a></li>
-                <li><a href="/me">Personal Wall</a></li>
-            </ul>
+            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+                <a class="navbar-brand" href="#">Corona Social</a>
+                <a class="nav-item nav-link" href="/">Stories Wall</a>
+                <a class="nav-item nav-link" href="/me">Personal Wall</a>
+                <a class="nav-item btn btn-outline-danger">Log out</a>
+            </nav>
         </header>
+
         <div id="create">
             <form id="createstory">
-                <textarea rows="10" cols="100" name="text" id="text" placeholder="Your story"></textarea>
-                <button type="submit">Post</button>
+                <div class="form-group">
+                    <textarea class="form-control"rows="10" cols="100" name="text" id="text" placeholder="Your story"></textarea>
+                    <button class="btn-info col-12" type="submit">Post</button>
+                </div>
             </form>
         </div>
         <div id="stories">
-            <div class="story">
+            <div class="border container">
                 <h1>Test story</h1>
-                <small>by admin</small>
+                <h4>By Admin</h4>
+                <hr>
                 <p>This is the body</p>
+                <hr>
                 <p>3 likes</p>
-            </div>
-            <div class="story">
-                <h1>Test story</h1>
-                <small>by admin</small>
-                <p>This is the body</p>
-                <p>6 likes</p>
-            </div>
-            <div class="story">
-                <h1>Test story</h1>
-                <small>by admin</small>
-                <p>This is the body</p>
-                <p>3 likes</p>
-            </div>
-            <div class="story">
-                <h1>Test story</h1>
-                <small>by admin</small>
-                <p>This is the body</p>
-                <p>5 likes</p>
             </div>
         </div>
     </div>
