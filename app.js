@@ -19,6 +19,19 @@ const users = require("./routes/users");
 const stories = require("./routes/stories");
 
 const app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+
+server.listen('80', () => {
+  console.log('Server listening on Port 80');
+})
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('create-story', function(text){
+    console.log(text);
+  });
+});
 
 // view engine setup
 // app.set("views", path.join(__dirname, "views"));

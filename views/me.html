@@ -39,4 +39,19 @@
     </div>
     <!-- <script src="/js/main.js"></script> -->
 </body>
+<script src="http://localhost/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    $(function () {
+        var socket = io();
+        $('#createstory').submit(function(e){
+            e.preventDefault(); // prevents page reloading
+            text = $('#text').val();
+            socket.emit('create-story', $('#text').val());
+            ('#text').val('');
+            return false;
+        });
+    });
+  
+</script>
 </html>
