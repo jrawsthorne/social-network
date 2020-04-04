@@ -19,9 +19,9 @@ const db = openDB("CoronaSocial", 1, {
 
 window.onload = async () => {
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./service-worker.js');
-    }
+    // if ('serviceWorker' in navigator) {
+    //    navigator.serviceWorker.register('./service-worker.js');
+    //}
 
     // const cached = await (await db).getAllFromIndex("stories", "createdAt");
     // drawStories(cached);
