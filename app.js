@@ -35,8 +35,13 @@ app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static('public'))
+app.use(express.static('public'));
+
 app.use("/stories", stories);
+app.use("/", index);
+app.use("/users", users);
+
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/index.html`));
@@ -53,11 +58,6 @@ app.get('/me', (req, res) => {
 app.get('/*', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/404.html`));
 });
-
-// app.use("/", index);
-// app.use("/users", users);
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
