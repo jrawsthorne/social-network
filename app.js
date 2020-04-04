@@ -28,6 +28,9 @@ server.listen('80', () => {
 })
 io.on('connection', function(socket){
   console.log('a user connected');
+  socket.on('create-story', function(text){
+    console.log(text);
+  });
 });
 
 // view engine setup
