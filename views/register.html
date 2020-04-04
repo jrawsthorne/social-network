@@ -1,7 +1,24 @@
-<form action="/register" method="POST">
-  <input placeholder="Username" type="text" name="username" />
-  <input placeholder="Password" type="password" name="password" />
-  <button type="submit">Register</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="register">
+      <p id="error"></p>
+      <input placeholder="Username" type="text" name="username" id="username" />
+      <input
+        placeholder="Password"
+        type="password"
+        name="password"
+        id="password"
+      />
+      <button type="submit">Register</button>
+    </form>
 
-<a href="/login">Login</a>
+    <a href="/login">Login</a>
+    <script type="module" src="/js/register.js"></script>
+  </body>
+</html>

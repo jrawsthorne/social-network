@@ -17,7 +17,47 @@ const db = openDB("CoronaSocial", 1, {
     },
 });
 
+async function login() {
+    const storedUsername = window.localStorage.getItem("username");
+
+    if (storedUsername) {
+        document.getElementById("greeting").innerText = `Hello ${storedUsername}`;
+    }
+
+    let username;
+
+    try {
+        const res = await fetch("/users/me", { headers: { "Content-type": "application/json" } });
+        const json = await res.json();
+        username = json.username;
+    } catch (e) {
+
+    }
+
+    if (!username) {
+        window.localStorage.removeItem("username");
+        window.location = "/login";
+    } else {
+        window.localStorage.setItem("username", username);
+        document.getElementById("greeting").innerText = `Hello ${username}`;
+    }
+
+}
+
 window.onload = async () => {
+
+    document.querySelector("a#logout").addEventListener("click", async e => {
+        e.preventDefault();
+        window.localStorage.removeItem("username");
+        try {
+            await fetch("/logout", { method: "POST" });
+        } catch (e) { }
+        window.location = "/login";
+    })
+
+    login();
+
+
 
     // if ('serviceWorker' in navigator) {
     //    navigator.serviceWorker.register('./service-worker.js');
@@ -33,7 +73,7 @@ window.onload = async () => {
     // console.log(document.getElementById("stories"))
 
 
-    const stories = await getStories();
+    // const stories = await getStories();
 
     // const newStories = stories.filter(story => !cachedIds.has(story._id));
 
@@ -45,7 +85,7 @@ window.onload = async () => {
     //     story.remove();
     // }
 
-    drawStories(stories);
+    // drawStories(stories);
     // try {
     //     await cacheStories(stories);
     // } catch (e) {

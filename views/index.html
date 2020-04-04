@@ -1,64 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Corona Social</title>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-<body class="container">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="container">
     <div>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-                <a class="navbar-brand" href="#">Corona Social</a>
-                <a class="nav-item nav-link" href="/">Stories Wall</a>
-                <a class="nav-item nav-link" href="/me">Personal Wall</a>
-                <a class="nav-item btn btn-outline-danger">Log out</a>
-            </nav>
-        </header>
-        <div class="stories">
-            <div class="story container border">
-                <h1>Test story</h1>
-                <h4>By user1</h4>
-                <p>This is the body</p>
-                <hr>
-                <form class="like">
-                    <div class='form-group row'>
-                        <label class="col-1"for="score">Score: </label>
-                        <input class="form-control col-1" type="number" max="5" min="0" name="score" value="0">
-                        <button type="submit" class="btn btn-primary col-10">Like</button>
-                    </div>
-                </form>
+      <header>
+        <nav
+          class="navbar navbar-expand-lg navbar-light"
+          style="background-color: #e3f2fd;"
+        >
+          <a class="navbar-brand" href="#">Corona Social</a>
+          <a class="nav-item nav-link" href="/">Stories Wall</a>
+          <a class="nav-item nav-link" href="/me">Personal Wall</a>
+          <a class="nav-item btn btn-outline-danger" id="logout">Log out</a>
+        </nav>
+      </header>
+      <h1 id="greeting"></h1>
+      <div class="stories">
+        <div class="story container border">
+          <h1>Test story</h1>
+          <h4>By user1</h4>
+          <p>This is the body</p>
+          <hr />
+          <form class="like">
+            <div class="form-group row">
+              <label class="col-1" for="score">Score: </label>
+              <input
+                class="form-control col-1"
+                type="number"
+                max="5"
+                min="0"
+                name="score"
+                value="0"
+              />
+              <button type="submit" class="btn btn-primary col-10">Like</button>
             </div>
-            <div class="story container border">
-                <h1>Test story</h1>
-                <h4>By user5</h4>
-                <p>This is the body</p>
-                <hr>
-                <form class="like">
-                    <div class='form-group row'>
-                        <label class="col-1"for="score">Score: </label>
-                        <input class="form-control col-1" type="number" max="5" min="0" name="score" value="0">
-                        <button type="submit" class="btn btn-primary col-10">Like</button>
-                    </div>
-                </form>
-            </div>
-            <div class="story container border">
-                <h1>Test story</h1>
-                <h4>By user2</h4>
-                <p>This is the body</p>
-                <hr>
-                <form class="like">
-                    <div class='form-group row'>
-                        <label class="col-1"for="score">Score: </label>
-                        <input class="form-control col-1" type="number" max="5" min="0" name="score" value="0">
-                        <button type="submit" class="btn btn-primary col-10">Like</button>
-                    </div>
-                </form>
-            </div>
+          </form>
         </div>
+        <div class="story container border">
+          <h1>Test story</h1>
+          <h4>By user5</h4>
+          <p>This is the body</p>
+          <hr />
+          <form class="like">
+            <div class="form-group row">
+              <label class="col-1" for="score">Score: </label>
+              <input
+                class="form-control col-1"
+                type="number"
+                max="5"
+                min="0"
+                name="score"
+                value="0"
+              />
+              <button type="submit" class="btn btn-primary col-10">Like</button>
+            </div>
+          </form>
+        </div>
+        <div class="story container border">
+          <h1>Test story</h1>
+          <h4>By user2</h4>
+          <p>This is the body</p>
+          <hr />
+          <form class="like">
+            <div class="form-group row">
+              <label class="col-1" for="score">Score: </label>
+              <input
+                class="form-control col-1"
+                type="number"
+                max="5"
+                min="0"
+                name="score"
+                value="0"
+              />
+              <button type="submit" class="btn btn-primary col-10">Like</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <script type="module" src="/js/index.js"></script>
-</body>
+  </body>
 </html>
