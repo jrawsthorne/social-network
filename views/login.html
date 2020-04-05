@@ -3,22 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Corona Social</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
-    <form id="login">
-      <p id="error"></p>
-      <input placeholder="Username" type="text" id="username" name="username" />
-      <input
-        placeholder="Password"
-        type="password"
-        id="password"
-        name="password"
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div class="container text-center main border">
+      <h1>Welcome to Corona Social</h1>
+      <h2>Please sign in</h2>
+      <form id="login">
+        <p id="error"></p>
+        <input class="form-control login" placeholder="Username" type="text" id="username" name="username" />
+        <input
+          class="form-control login"
+          placeholder="Password"
+          type="password"
+          id="password"
+          name="password"
+        />
+        <button class="btn btn-success form-control login" type="submit">Login</button>
+      </form>
 
-    <a href="/register">Register</a>
-    <script type="module" src="/js/login.js"></script>
+      <a href="/register">Register</a>
+      <script type="module" src="/js/login.js"></script>
+  </div>
   </body>
 </html>

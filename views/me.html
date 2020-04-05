@@ -14,9 +14,10 @@
                 <a class="navbar-brand" href="#">Corona Social</a>
                 <a class="nav-item nav-link" href="/">Stories Wall</a>
                 <a class="nav-item nav-link" href="/me">Personal Wall</a>
-                <a class="nav-item btn btn-outline-danger">Log out</a>
+                <a class="nav-item btn btn-outline-danger" id="logout">Log out</a>
             </nav>
         </header>
+        <h1 id="greeting"></h1>
 
         <div class="create" id="create">
             <form id="createstory">
@@ -41,17 +42,7 @@
 </body>
 <script src="http://localhost/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-<script>
-    $(function () {
-        var socket = io();
-        $('#createstory').submit(function(e){
-            e.preventDefault(); // prevents page reloading
-            text = $('#text').val();
-            socket.emit('create-story', $('#text').val());
-            ('#text').val('');
-            return false;
-        });
-    });
-  
-</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type="module" src="/js/me.js"></script>
 </html>
