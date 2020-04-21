@@ -30,6 +30,12 @@ io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('create-story', function(storyPackage){
     console.log("New story from " + storyPackage.name +" it reads: " + storyPackage.text);
+    // Post story to db
+  });
+
+  socket.on('like-post', function(likePostPackage){
+    console.log("New like from " + likePostPackage.name  + " number of likes: " + likePostPackage.numberOfLikes);
+    // Post like to db
   });
 });
 

@@ -1,8 +1,7 @@
 import { openDB } from "./idb.js";
-
+let finalUsername = "";
 const storyTemplate = document.getElementById("story");
 const storiesDiv = document.getElementById("stories");
-
 const db = openDB("CoronaSocial", 1, {
     upgrade(db) {
         // Create a store of objects
@@ -30,6 +29,7 @@ async function login() {
         const res = await fetch("/users/me", { headers: { "Content-type": "application/json" } });
         const json = await res.json();
         username = json.username;
+        finalUsername = username;
     } catch (e) {
 
     }
@@ -55,7 +55,23 @@ window.onload = async () => {
         window.location = "/login";
     })
 
+    $(document).ready(function() {
+        var socket = io();
+        $('#like').submit(function(e){
+            e.preventDefault(); // prevents page reloading
+            console.log("AS");
+            socket.emit('like-post', {
+                name: finalUsername,
+                numberOfLikes: $('#likeNumber').val()
+            });
+            $('#text').val('');
+            return false;
+        });
+    });
+
     login();
+
+
 
 
 
