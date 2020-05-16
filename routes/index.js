@@ -8,14 +8,12 @@ const Story = require("../models/Story");
 const initDB = require("../controllers/init");
 initDB.init();
 
-// router.get("/", async function (req, res, next) {
-//   if (!req.user) {
-//     return res.redirect("/login");
-//   }
-//   const user = { username: req.user.username };
-//   const stories = await Story.find().sort({ createdAt: "desc" }).populate("author").exec();
-//   res.render("index", { user, stories });
-// });
+const fs = require('fs');
+const Ranking= require('../CollectiveIntelligence/Ranking');
+const users = require('../public/Data/users');
+
+
+
 
 // router.get('/register', function (req, res) {
 //   res.render('register');
@@ -45,5 +43,21 @@ router.post('/logout', function (req, res) {
   req.logout();
   res.status(200).json(null);
 });
+router.get("/", async function (req, res, next) {
 
+  // set name to the current user
+  let name = "user_0";
+  let ranking= new Ranking();
+
+  // results = ordered stories by similarity score
+  // users need to be in the format shown in public/Data/users.js
+  let results= ranking.getRecommendations(users, name, 'sim_pearson');
+
+  if (!req.user) {
+    return res.redirect("/login");
+  }
+  const user = { username: req.user.username };
+  const stories = await Story.find().sort({ createdAt: "desc" }).populate("author").exec();
+  res.render("index", { user, stories });
+});
 module.exports = router;
