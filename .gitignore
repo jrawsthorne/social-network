@@ -1,3 +1,7 @@
 .idea
 node_modules
 .vscode
+data/db
+uploads/*
+
+!uploads/.gitkeep 

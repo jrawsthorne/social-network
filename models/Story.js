@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const Story = new Schema({
     text: {
         type: String,
-        required: true
+        required: true,
+        max: 150
     },
     author: {
         type: Schema.Types.ObjectId,
@@ -17,7 +18,10 @@ const Story = new Schema({
             min: 0,
             max: 5
         },
-        user: { type: Schema.Types.ObjectId, ref: "User" }
+        user: { 
+            type: Schema.Types.ObjectId, 
+            ref: "User" 
+        }
     }],
     images: [{
         type: String,

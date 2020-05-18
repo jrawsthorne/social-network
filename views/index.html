@@ -12,19 +12,23 @@
       crossorigin="anonymous"
     />
   </head>
-  <body class="container">
-    <div>
-      <header>
-        <nav
-          class="navbar navbar-expand-lg navbar-light"
-          style="background-color: #e3f2fd;"
-        >
-          <a class="navbar-brand" href="#">Corona Social</a>
+  <body>
+    <header>
+      <nav
+        class="navbar navbar-expand-lg navbar-light"
+        style="background-color: #e3f2fd;"
+      >
+        <a class="navbar-brand" href="#">Corona Social</a>
+        <div class="navbar-nav">
           <a class="nav-item nav-link" href="/">Stories Wall</a>
           <a class="nav-item nav-link" href="/me">Personal Wall</a>
+        </div>
+        <div class="navbar-nav">
           <a class="nav-item btn btn-outline-danger" id="logout">Log out</a>
-        </nav>
-      </header>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
       <h1 id="greeting"></h1>
       <div class="stories">
         <div class="story container border">

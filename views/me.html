@@ -8,21 +8,30 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
    </head>
 <body>
+    <header>
+        <nav
+          class="navbar navbar-expand-lg navbar-light"
+          style="background-color: #e3f2fd;"
+        >
+          <a class="navbar-brand" href="#">Corona Social</a>
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/">Stories Wall</a>
+            <a class="nav-item nav-link" href="/me">Personal Wall</a>
+          </div>
+          <div class="navbar-nav">
+            <a class="nav-item btn btn-outline-danger" id="logout">Log out</a>
+          </div>
+        </nav>
+    </header>
     <div class="container" id="container">
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-                <a class="navbar-brand" href="#">Corona Social</a>
-                <a class="nav-item nav-link" href="/">Stories Wall</a>
-                <a class="nav-item nav-link" href="/me">Personal Wall</a>
-                <a class="nav-item btn btn-outline-danger" id="logout">Log out</a>
-            </nav>
-        </header>
+
         <h1 id="greeting"></h1>
 
         <div class="create" id="create">
-            <form id="createstory">
+            <form action="/stories/create-story" enctype="multipart/form-data" method="POST">
                 <div class="form-group">
-                    <textarea class="form-control"rows="10" cols="100" name="text" id="text" placeholder="Your story"></textarea>
+                    <textarea class="form-control" rows="10" cols="100" name="text" id="text" placeholder="Your story"></textarea>
+                    <input type="file" id="fileupload" class="form-control-file" name="photos" multiple>
                     <button class="btn-info col-12" type="submit">Post</button>
                 </div>
             </form>
