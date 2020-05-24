@@ -1,54 +1,51 @@
 const express = require("express");
 const path = require("path");
-const favicon = require("serve-favicon");
 const logger = require("morgan");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const session = require('express-session')
+const session = require('express-session');
+const dotenv = require("dotenv");
 
-const User = require("./models/user");
-
+const User = require("./models/User");
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const index = require("./routes/index");
-const users = require("./routes/users");
+const connectDB = require("./config/db");
+
+dotenv.config({ path: "./config/config.env" });
+
+connectDB();
+
 const stories = require("./routes/stories");
+const auth = require("./routes/auth");
 
 const app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+const socket = require('http').Server(app);
+const io = require('socket.io')(socket);
 
-
-server.listen('80', () => {
-  console.log('Server listening on Port 80');
+socket.listen('8080', async () => {
+  console.log('SocketIO Server listening on Port 8080');
+  // const users = await User.find({});
+  // console.log(users);
 })
-io.on('connection', function(socket){
+
+io.on('connection', async function (socket) {
   console.log('a user connected');
-  socket.on('create-story', function(storyPackage){
-    console.log("New story from " + storyPackage.name +" it reads: " + storyPackage.text);
+  socket.on('create-story', function (storyPackage) {
+    console.log("New story from " + storyPackage.name + " it reads: " + storyPackage.text);
     // Post story to db
   });
 
-  socket.on('like-post', function(likePostPackage){
-    console.log("New like from " + likePostPackage.name  + " number of likes: " + likePostPackage.numberOfLikes);
+  socket.on('like-post', function (likePostPackage) {
+    console.log("New like from " + likePostPackage.name + " number of likes: " + likePostPackage.numberOfLikes);
     // Post like to db
   });
+
 });
 
-// view engine setup
-// app.set("views", path.join(__dirname, "views"));
-// app.set("view engine", "ejs");
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger("dev"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
+app.use(express.json());
 // TODO: CHANGE `secret` IN PROD
 app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
@@ -56,9 +53,8 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static('public'));
 
-app.use("/stories", stories);
-app.use("/", index);
-app.use("/users", users);
+app.use("/api/stories", stories);
+app.use("/api/auth", auth);
 
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
@@ -78,22 +74,24 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/404.html`));
 });
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  const err = new Error("Not Found");
-  err.status = 404;
-  next(err);
-});
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+//   const err = new Error("Not Found");
+//   err.status = 404;
+//   next(err);
+// });
 
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+// // error handler
+// app.use(function (err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render("error");
+// });
 
-module.exports = app;
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));

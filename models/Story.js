@@ -1,33 +1,23 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose");
 
-const Story = new Schema({
-    text: {
-        type: String,
-        required: true,
-        max: 150
-    },
-    author: {
-        type: Schema.Types.ObjectId,
-        ref: "User"
-    },
-    likes: [{
-        rating: {
-            required: true,
-            type: Number,
-            min: 0,
-            max: 5
+const Story = new mongoose.Schema(
+    {
+        text: {
+            type: String,
+            trim: true,
+            required: [true, "Text is required"]
         },
-        user: { 
-            type: Schema.Types.ObjectId, 
-            ref: "User" 
-        }
-    }],
-    images: [{
-        type: String,
-    }]
-}, {
-    timestamps: true
-});
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }],
+        images: [{
+            type: String,
+        }]
+    },
+    { timestamps: true }
+)
 
 module.exports = mongoose.model("Story", Story);

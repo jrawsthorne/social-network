@@ -1,6 +1,5 @@
 import { openDB } from "./idb.js";
 let finalUsername = "";
-const storyTemplate = document.getElementById("story");
 const storiesDiv = document.getElementById("stories");
 const db = openDB("CoronaSocial", 1, {
     upgrade(db) {
@@ -26,7 +25,7 @@ async function login() {
     let username;
 
     try {
-        const res = await fetch("/users/me", { headers: { "Content-type": "application/json" } });
+        const res = await fetch("/api/auth/me", { headers: { "Content-type": "application/json" } });
         const json = await res.json();
         username = json.username;
         finalUsername = username;
@@ -44,20 +43,59 @@ async function login() {
 
 }
 
+let recommendedFilter = false;
+
+async function refreshStories() {
+    const sDiv = document.querySelector(".stories");
+
+    const apiUrl = recommendedFilter ? "/api/stories/recommended" : "/api/stories";
+
+    const latestJson = await fetch(apiUrl);
+    const latest = await latestJson.json();
+
+    sDiv.textContent = "";
+
+    for (const story of latest.data) {
+        const outer = document.createElement("div");
+        outer.classList = "story container border";
+        const by = document.createElement("small");
+        by.innerHTML = `By ${story.author.username}`;
+        const text = document.createElement("p");
+        text.innerHTML = story.text;
+
+
+        outer.appendChild(text);
+        outer.appendChild(by);
+
+
+        sDiv.appendChild(outer);
+    }
+}
+
 window.onload = async () => {
+
+    refreshStories();
+
+    document.getElementById("toggle-sort").addEventListener("click", async () => {
+        recommendedFilter = !recommendedFilter;
+        document.getElementById("toggle-sort").disabled = true;
+        await refreshStories();
+        document.getElementById("toggle-sort").disabled = false;
+        document.getElementById("sort-text").innerHTML = `Sorting by ${recommendedFilter ? "recommended" : "latest"}`;
+    });
 
     document.querySelector("a#logout").addEventListener("click", async e => {
         e.preventDefault();
         window.localStorage.removeItem("username");
         try {
-            await fetch("/logout", { method: "POST" });
+            await fetch("/api/auth/logout", { method: "POST" });
         } catch (e) { }
         window.location = "/login";
     })
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var socket = io();
-        $('#like').submit(function(e){
+        $('#like').submit(function (e) {
             e.preventDefault(); // prevents page reloading
             console.log("AS");
             socket.emit('like-post', {
@@ -70,10 +108,6 @@ window.onload = async () => {
     });
 
     login();
-
-
-
-
 
     // if ('serviceWorker' in navigator) {
     //    navigator.serviceWorker.register('./service-worker.js');

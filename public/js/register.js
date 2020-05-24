@@ -4,7 +4,7 @@ window.onload = async () => {
         const username = e.target.querySelector("#username").value;
         const password = e.target.querySelector("#password").value;
         try {
-            const res = await fetch("/register", {
+            const res = await fetch("/api/auth/register", {
                 method: "POST",
                 body: JSON.stringify({ username, password }),
                 headers: {
@@ -24,7 +24,7 @@ window.onload = async () => {
                 }
 
             }
-        } catch (e) {
+        } catch (error) {
             e.target.querySelector("#error").innerText = "unknown error";
         }
     });

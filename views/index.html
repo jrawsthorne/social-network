@@ -30,74 +30,13 @@
     </header>
     <div class="container">
       <h1 id="greeting"></h1>
-      <div class="stories">
-        <div class="story container border">
-          <h1>Test story</h1>
-          <h4>By user1</h4>
-          <p>This is the body</p>
-          <hr />
-          <form id="like">
-            <div class="form-group row">
-              <label class="col-1" for="score">Score: </label>
-              <input
-                class="form-control col-1"
-                type="number"
-                max="5"
-                min="0"
-                name="score"
-                id="likeNumber"
-                value="0"
-              />
-              <button type="submit" class="btn btn-primary col-10">Like</button>
-            </div>
-          </form>
-        </div>
-        <div class="story container border">
-          <h1>Test story</h1>
-          <h4>By user5</h4>
-          <p>This is the body</p>
-          <hr />
-          <form class="like">
-            <div class="form-group row">
-              <label class="col-1" for="score">Score: </label>
-              <input
-                class="form-control col-1"
-                type="number"
-                max="5"
-                min="0"
-                name="score"
-                value="0"
-              />
-              <button type="submit" class="btn btn-primary col-10">Like</button>
-            </div>
-          </form>
-        </div>
-        <div class="story container border">
-          <h1>Test story</h1>
-          <h4>By user2</h4>
-          <p>This is the body</p>
-          <hr />
-          <form class="like">
-            <div class="form-group row">
-              <label class="col-1" for="score">Score: </label>
-              <input
-                class="form-control col-1"
-                type="number"
-                max="5"
-                min="0"
-                name="score"
-                value="0"
-              />
-              <button type="submit" class="btn btn-primary col-10">Like</button>
-            </div>
-          </form>
-        </div>
-      </div>
+      <button id="toggle-sort">Toggle sort</button>
+      <p id="sort-text">Sorting by latest</p>
+      <div class="stories"></div>
     </div>
     <script type="module" src="/js/index.js"></script>
   </body>
   <script src="http://localhost/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  
 </html>

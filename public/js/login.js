@@ -4,7 +4,7 @@ window.onload = async () => {
         const username = e.target.querySelector("#username").value;
         const password = e.target.querySelector("#password").value;
         try {
-            const res = await fetch("/login", {
+            const res = await fetch("/api/auth/login", {
                 method: "POST",
                 body: JSON.stringify({ username, password }),
                 headers: {
@@ -12,7 +12,6 @@ window.onload = async () => {
                 }
             });
             if (res.ok) {
-                const { username } = await res.json();
                 window.localStorage.setItem("username", username);
                 window.location = "/";
             } else if (res.status === 401) {
@@ -20,7 +19,7 @@ window.onload = async () => {
             } else {
                 e.target.querySelector("#error").innerText = `unknown error`;
             }
-        } catch (e) {
+        } catch (error) {
             e.target.querySelector("#error").innerText = `unknown error: ${e}`;
         }
     });
