@@ -12,18 +12,18 @@ window.onload = async () => {
     })
 
     login();
-    $(document).ready(function () {
-        var socket = io();
-        $('#createstory').submit(function (e) {
-            e.preventDefault(); // prevents page reloading
-            socket.emit('create-story', {
-                name: storedUsername,
-                text: $('#text').val()
-            });
-            $('#text').val('');
-            return false;
-        });
-    });
+    // $(document).ready(function () {
+    //     var socket = io();
+    //     $('#createstory').submit(function (e) {
+    //         e.preventDefault(); // prevents page reloading
+    //         socket.emit('create-story', {
+    //             name: storedUsername,
+    //             text: $('#text').val()
+    //         });
+    //         $('#text').val('');
+    //         return false;
+    //     });
+    // });
     async function login() {
         const storedUsername = window.localStorage.getItem("username");
 
@@ -95,10 +95,13 @@ async function fetchStories() {
         const text = document.createElement("p");
         text.innerHTML = story.text;
 
-        const photos = document.createElement("p");
+        const photos = document.createElement("div");
 
-        for (const [index, photo] of story.images.entries()) {
-            photos.innerHTML += `photo ${index + 1}: ${photo}, `;
+        for (const photo of story.images) {
+            const img = document.createElement("img");
+            img.src = photo;
+            img.width = 250;
+            photos.appendChild(img);
         }
 
         outer.appendChild(by);

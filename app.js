@@ -58,6 +58,8 @@ app.use("/api/auth", auth);
 
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
+app.use('/uploads', express.static(__dirname + '/uploads'));
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/index.html`));
 });

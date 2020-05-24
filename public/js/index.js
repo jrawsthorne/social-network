@@ -1,19 +1,19 @@
-import { openDB } from "./idb.js";
+// import { openDB } from "./idb.js";
 let finalUsername = "";
 const storiesDiv = document.getElementById("stories");
-const db = openDB("CoronaSocial", 1, {
-    upgrade(db) {
-        // Create a store of objects
-        const store = db.createObjectStore('stories', {
-            // The 'id' property of the object will be the key.
-            keyPath: '_id',
-            // If it isn't explicitly set, create a value by auto incrementing.
-            autoIncrement: false,
-        });
-        // Create an index on the 'date' property of the objects.
-        store.createIndex('createdAt', 'createdAt');
-    },
-});
+// const db = openDB("CoronaSocial", 1, {
+//     upgrade(db) {
+//         // Create a store of objects
+//         const store = db.createObjectStore('stories', {
+//             // The 'id' property of the object will be the key.
+//             keyPath: '_id',
+//             // If it isn't explicitly set, create a value by auto incrementing.
+//             autoIncrement: false,
+//         });
+//         // Create an index on the 'date' property of the objects.
+//         store.createIndex('createdAt', 'createdAt');
+//     },
+// });
 
 async function login() {
     const storedUsername = window.localStorage.getItem("username");
@@ -93,19 +93,19 @@ window.onload = async () => {
         window.location = "/login";
     })
 
-    $(document).ready(function () {
-        var socket = io();
-        $('#like').submit(function (e) {
-            e.preventDefault(); // prevents page reloading
-            console.log("AS");
-            socket.emit('like-post', {
-                name: finalUsername,
-                numberOfLikes: $('#likeNumber').val()
-            });
-            $('#text').val('');
-            return false;
-        });
-    });
+    // $(document).ready(function () {
+    //     var socket = io();
+    //     $('#like').submit(function (e) {
+    //         e.preventDefault(); // prevents page reloading
+    //         console.log("AS");
+    //         socket.emit('like-post', {
+    //             name: finalUsername,
+    //             numberOfLikes: $('#likeNumber').val()
+    //         });
+    //         $('#text').val('');
+    //         return false;
+    //     });
+    // });
 
     login();
 
