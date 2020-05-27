@@ -1,8 +1,12 @@
 const cacheName = 'social-v1';
 const staticAssets = [
     "./",
+    "./stylesheets/style.css",
+    "./js/app.js",
+    "./js/database.js",
     "./js/index.js",
     "./js/idb.js",
+    "./js/me.js",
     "./js/wrap-idb-value.js"
 ]
 

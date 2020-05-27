@@ -66,10 +66,40 @@ window.onload = async () => {
 
         await fetch("/api/stories", { method: "POST", body: formData });
 
+        refreshStories();
     });
 
-    fetchStories();
+    refreshStories();
 
+}
+
+function renderStories(stories) {
+    var sDiv = document.querySelector(".stories");
+
+    sDiv.textContent = "";
+
+    for (const story of stories) {
+        const outer = document.createElement("div");
+        outer.classList = "story container border";
+        const by = document.createElement("small");
+        by.innerHTML = `By ${story.author.username} at ${new Date(story.createdAt)}`;
+        const text = document.createElement("p");
+        text.innerHTML = story.text;
+
+
+        outer.appendChild(text);
+        outer.appendChild(by);
+
+
+        sDiv.appendChild(outer);
+    }
+}
+
+async function refreshStories() {
+    fetchStories().catch(error => {
+        const storedUsername = window.localStorage.getItem("username");
+        getPersonalStories(storedUsername);
+    });
 }
 
 async function fetchStories() {
@@ -80,35 +110,10 @@ async function fetchStories() {
         return;
     }
 
-    const sDiv = document.getElementById("stories");
-
     const latestJson = await fetch(`/api/stories/${storedUsername}`);
     const latest = await latestJson.json();
 
-    sDiv.textContent = "";
+    renderStories(latest.data);
 
-    for (const story of latest.data) {
-        const outer = document.createElement("div");
-        outer.classList = "container border";
-        const by = document.createElement("small");
-        by.innerHTML = `<b>${story.author.username}</b> ${new Date(story.createdAt)}`;
-        const text = document.createElement("p");
-        text.innerHTML = story.text;
-
-        const photos = document.createElement("div");
-
-        for (const photo of story.images) {
-            const img = document.createElement("img");
-            img.src = photo;
-            img.width = 250;
-            photos.appendChild(img);
-        }
-
-        outer.appendChild(by);
-        outer.appendChild(text);
-        outer.appendChild(photos);
-
-
-        sDiv.appendChild(outer);
-    }
+    storeStoriesCachedData(latest.data);
 }

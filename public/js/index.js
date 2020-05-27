@@ -1,19 +1,5 @@
-// import { openDB } from "./idb.js";
 let finalUsername = "";
 const storiesDiv = document.getElementById("stories");
-// const db = openDB("CoronaSocial", 1, {
-//     upgrade(db) {
-//         // Create a store of objects
-//         const store = db.createObjectStore('stories', {
-//             // The 'id' property of the object will be the key.
-//             keyPath: '_id',
-//             // If it isn't explicitly set, create a value by auto incrementing.
-//             autoIncrement: false,
-//         });
-//         // Create an index on the 'date' property of the objects.
-//         store.createIndex('createdAt', 'createdAt');
-//     },
-// });
 
 async function login() {
     const storedUsername = window.localStorage.getItem("username");
@@ -45,21 +31,28 @@ async function login() {
 
 let recommendedFilter = false;
 
-async function refreshStories() {
-    const sDiv = document.querySelector(".stories");
+async function fetchStories() {
 
     const apiUrl = recommendedFilter ? "/api/stories/recommended" : "/api/stories";
 
     const latestJson = await fetch(apiUrl);
     const latest = await latestJson.json();
 
+    renderStories(latest.data);
+
+    storeStoriesCachedData(latest.data)
+}
+
+function renderStories(stories) {
+    var sDiv = document.querySelector(".stories");
+
     sDiv.textContent = "";
 
-    for (const story of latest.data) {
+    for (const story of stories) {
         const outer = document.createElement("div");
         outer.classList = "story container border";
         const by = document.createElement("small");
-        by.innerHTML = `By ${story.author.username}`;
+        by.innerHTML = `By ${story.author.username} at ${new Date(story.createdAt)}`;
         const text = document.createElement("p");
         text.innerHTML = story.text;
 
@@ -70,6 +63,13 @@ async function refreshStories() {
 
         sDiv.appendChild(outer);
     }
+}
+
+async function refreshStories() {
+    fetchStories().catch(error => {
+        let username = window.localStorage.getItem('username');
+        getOtherUserStories(username);
+    });
 }
 
 window.onload = async () => {
@@ -108,10 +108,6 @@ window.onload = async () => {
     // });
 
     login();
-
-    // if ('serviceWorker' in navigator) {
-    //    navigator.serviceWorker.register('./service-worker.js');
-    //}
 
     // const cached = await (await db).getAllFromIndex("stories", "createdAt");
     // drawStories(cached);
