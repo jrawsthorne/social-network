@@ -199,7 +199,7 @@ function renderStories(stories) {
         const outer = document.createElement("div");
         outer.classList = "story container border";
         const by = document.createElement("small");
-        by.innerHTML = `By ${story.author.username} at ${new Date(story.createdAt)}`;
+        by.innerHTML = `By <b>${story.author.username}</b> at ${new Date(story.createdAt)}`;
         const text = document.createElement("p");
         text.innerHTML = story.text;
 

@@ -109,8 +109,8 @@ function renderStories(stories) {
             photos.appendChild(img);
         }   
 
-        outer.appendChild(text);
         outer.appendChild(by);
+        outer.appendChild(text);
         outer.appendChild(photos);
 
         sDiv.appendChild(outer);
