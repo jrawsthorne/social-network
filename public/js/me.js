@@ -2,6 +2,8 @@
 window.onload = async () => {
     const storedUsername = window.localStorage.getItem("username");
 
+    login();
+
     document.querySelector("a#logout").addEventListener("click", async e => {
         e.preventDefault();
         window.localStorage.removeItem("username");
@@ -11,7 +13,19 @@ window.onload = async () => {
         window.location = "/login";
     })
 
-    login();
+    /**
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js');
+    }
+    */
+
+    //check for support
+    if ('indexedDB' in window) {
+        initDatabase();
+    } else {
+        console.log('This browser doesn\'t support IndexedDB');
+    }
+
     // $(document).ready(function () {
     //     var socket = io();
     //     $('#createstory').submit(function (e) {
@@ -82,14 +96,22 @@ function renderStories(stories) {
         const outer = document.createElement("div");
         outer.classList = "story container border";
         const by = document.createElement("small");
-        by.innerHTML = `By ${story.author.username} at ${new Date(story.createdAt)}`;
+        by.innerHTML = `By <b>${story.author.username}</b> at ${new Date(story.createdAt)}`;
         const text = document.createElement("p");
         text.innerHTML = story.text;
 
+        const photos = document.createElement("div");
+
+        for (const photo of story.images) {
+            const img = document.createElement("img");
+            img.src = photo;
+            img.width = 250;
+            photos.appendChild(img);
+        }   
 
         outer.appendChild(text);
         outer.appendChild(by);
-
+        outer.appendChild(photos);
 
         sDiv.appendChild(outer);
     }

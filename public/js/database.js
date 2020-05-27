@@ -186,6 +186,7 @@ function getPersonalStories(username) {
 
 /**
  * Renders each of the story Object in the list to a standard application design in a section with a class of stories
+ * Seperate Method as Images are too large to be stored locally and therefore cannot be rendered as usual
  * @param {[Object]} stories list of Stories to render
  * @see [Story] Renders the stories provided
  */

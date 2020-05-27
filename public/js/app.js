@@ -21,8 +21,9 @@ window.addEventListener('online', function(e) {
  * @see Row Row indicating the client is offline
  */
 function showOfflineWarning(){
-    if (document.getElementById('offline')!=null)
+    if (document.getElementById('offline')!=null) {
         document.getElementById('offline').style.display='block';
+    }
 }
 
 /**
@@ -30,22 +31,7 @@ function showOfflineWarning(){
  * @see Row Row indicating the client is offline is removed
  */
 function hideOfflineWarning(){
-    if (document.getElementById('offline')!=null)
+    if (document.getElementById('offline')!=null) {
         document.getElementById('offline').style.display='none';
-}
-
-// When Window is loaded register service worker and initialise the database
-window.onload = async () => {
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./service-worker.js');
     }
-
-    //check for support
-    if ('indexedDB' in window) {
-        initDatabase();
-    } else {
-        console.log('This browser doesn\'t support IndexedDB');
-    }
-
 }
