@@ -42,7 +42,7 @@ function initDatabase() {
 
 /**
  * Returns a date object with the date exactly 28 days ago
- * @return date exactly 28 days ago
+ * @return {Date} date exactly 28 days ago
  */
 function calcDeleteDate() {
     var deleteDate = new Date();
@@ -117,7 +117,7 @@ async function storeStoryCachedData(storyObject) {
 }
 
 /**
- * Render every story in the IndexDB using the renderStories function
+ * Render every story in the IndexDB using the renderStoriesWithoutPhotos function
  * Does not return anything
  * @see [Story]
  */
@@ -130,7 +130,7 @@ function getGlobalAllStories() {
         }).then(function (returnedStories) {
             returnedStories = returnedStories.reverse();
             if (returnedStories) {
-                renderStories(returnedStories);
+                renderStoriesWithoutPhotos(returnedStories);
             }
         });
     }
@@ -138,7 +138,7 @@ function getGlobalAllStories() {
 
 /**
  * Loads a list of Story Objects from the IndexDB database and filters the stories
- * removing all stories with an author that has a matching username after will render them using the renderStories function
+ * removing all stories with an author that has a matching username after will render them using the renderStoriesWithoutPhotos function
  * Does not return anything
  * @param {String} username username to remove stories with a matching author
  * @see [Story]
@@ -156,14 +156,14 @@ async function getOtherUserStories(username) {
                 return story.author.username != username;
             });
 
-            renderStories(other_user_stories);
+            renderStoriesWithoutPhotos(other_user_stories);
         });
     }
 }
 
 /**
  * Loads a list of Story Objects from the IndexDB database and filters the stories
- * removing all stories with an author that does not have a matching username after will render them using the renderStories function
+ * removing all stories with an author that does not have a matching username after will render them using the renderStoriesWithoutPhotos function
  * Does not return anything 
  * @param {String} username
  * @see [Story]
@@ -178,7 +178,7 @@ function getPersonalStories(username) {
         }).then(function (returnedStories) {
             if (returnedStories) {
                 returnedStories = returnedStories.reverse(); // order into reverse chronological order
-                renderStories(returnedStories);
+                renderStoriesWithoutPhotos(returnedStories);
             }
         });
     }
@@ -190,7 +190,7 @@ function getPersonalStories(username) {
  * @param {[Object]} stories list of Stories to render
  * @see [Story] Renders the stories provided
  */
-function renderStories(stories) {
+function renderStoriesWithoutPhotos(stories) {
     var sDiv = document.querySelector(".stories");
 
     sDiv.textContent = "";
@@ -203,10 +203,8 @@ function renderStories(stories) {
         const text = document.createElement("p");
         text.innerHTML = story.text;
 
-
-        outer.appendChild(text);
         outer.appendChild(by);
-
+        outer.appendChild(text);
 
         sDiv.appendChild(outer);
     }
