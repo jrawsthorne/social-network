@@ -1,34 +1,6 @@
 let finalUsername = "";
 const storiesDiv = document.getElementById("stories");
 
-async function login() {
-    const storedUsername = window.localStorage.getItem("username");
-
-    if (storedUsername) {
-        document.getElementById("greeting").innerText = `Hello ${storedUsername}`;
-    }
-
-    let username;
-
-    try {
-        const res = await fetch("/api/auth/me", { headers: { "Content-type": "application/json" } });
-        const json = await res.json();
-        username = json.username;
-        finalUsername = username;
-    } catch (e) {
-
-    }
-
-    if (!username) {
-        window.localStorage.removeItem("username");
-        window.location = "/login";
-    } else {
-        window.localStorage.setItem("username", username);
-        document.getElementById("greeting").innerText = `Hello ${username}`;
-    }
-
-}
-
 let recommendedFilter = false;
 
 async function fetchStories() {
@@ -43,46 +15,16 @@ async function fetchStories() {
     storeStoriesCachedData(latest.data)
 }
 
-function renderStories(stories) {
-    var sDiv = document.querySelector(".stories");
-
-    sDiv.textContent = "";
-
-    for (const story of stories) {
-        const outer = document.createElement("div");
-        outer.classList = "story container border";
-        const by = document.createElement("small");
-        by.innerHTML = `By <b>${story.author.username}</b> at ${new Date(story.createdAt)}`;
-        const text = document.createElement("p");
-        text.innerHTML = story.text;
-
-        const photos = document.createElement("div");
-
-        for (const photo of story.images) {
-            const img = document.createElement("img");
-            img.src = photo;
-            img.width = 250;
-            photos.appendChild(img);
-        }
-
-        outer.appendChild(by);
-        outer.appendChild(text);
-        outer.appendChild(photos);
-
-        sDiv.appendChild(outer);
-    }
-}
-
 async function refreshStories() {
     fetchStories().catch(error => {
-        let username = window.localStorage.getItem('username');
+        const username = window.localStorage.getItem('username');
         getOtherUserStories(username);
     });
 }
 
 window.onload = async () => {
 
-    login();
+    verifyLogin();
 
     document.getElementById("toggle-sort").addEventListener("click", async () => {
         recommendedFilter = !recommendedFilter;
@@ -101,11 +43,9 @@ window.onload = async () => {
         window.location = "/login";
     })
 
-    /**
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./service-worker.js');
     }
-    */
 
     //check for support
     if ('indexedDB' in window) {
