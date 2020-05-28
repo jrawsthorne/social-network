@@ -21,28 +21,8 @@ const stories = require("./routes/stories");
 const auth = require("./routes/auth");
 
 const app = express();
-const socket = require('http').Server(app);
-const io = require('socket.io')(socket);
 
-socket.listen('8080', async () => {
-  console.log('SocketIO Server listening on Port 8080');
-  // const users = await User.find({});
-  // console.log(users);
-})
 
-io.on('connection', async function (socket) {
-  console.log('a user connected');
-  socket.on('create-story', function (storyPackage) {
-    console.log("New story from " + storyPackage.name + " it reads: " + storyPackage.text);
-    // Post story to db
-  });
-
-  socket.on('like-post', function (likePostPackage) {
-    console.log("New like from " + likePostPackage.name + " number of likes: " + likePostPackage.numberOfLikes);
-    // Post like to db
-  });
-
-});
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -97,3 +77,17 @@ app.get('/*', (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+
+var io = require('socket.io').listen(server);
+
+
+io.on('connection', async function (socket) {
+  console.log('AAAA a user connected');
+  socket.on('create-story', function (storyPackage) {
+    console.log("New story from " + storyPackage.name + " it reads: " + storyPackage.text);
+    socket.broadcast.emit('new-story',{from:storyPackage.name});
+
+    // Post story to db
+  });
+
+});

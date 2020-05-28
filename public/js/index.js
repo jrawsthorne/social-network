@@ -114,19 +114,15 @@ window.onload = async () => {
         console.log('This browser doesn\'t support IndexedDB');
     }
 
-    // $(document).ready(function () {
-    //     var socket = io();
-    //     $('#like').submit(function (e) {
-    //         e.preventDefault(); // prevents page reloading
-    //         console.log("AS");
-    //         socket.emit('like-post', {
-    //             name: finalUsername,
-    //             numberOfLikes: $('#likeNumber').val()
-    //         });
-    //         $('#text').val('');
-    //         return false;
-    //     });
-    // });
+    $(document).ready(function () {
+         var socket = io();
+         socket.on('new-story', function(data){
+             var alertWindow = document.getElementById("alertWindow");
+             console.log("HHHH")
+             alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: '+data.from+' check it out by refreshing your page! </div>'
+
+         });
+     });
 
     refreshStories();
 

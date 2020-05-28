@@ -26,18 +26,6 @@ window.onload = async () => {
         console.log('This browser doesn\'t support IndexedDB');
     }
 
-    // $(document).ready(function () {
-    //     var socket = io();
-    //     $('#createstory').submit(function (e) {
-    //         e.preventDefault(); // prevents page reloading
-    //         socket.emit('create-story', {
-    //             name: storedUsername,
-    //             text: $('#text').val()
-    //         });
-    //         $('#text').val('');
-    //         return false;
-    //     });
-    // });
     async function login() {
         const storedUsername = window.localStorage.getItem("username");
 
@@ -79,7 +67,11 @@ window.onload = async () => {
         }
 
         await fetch("/api/stories", { method: "POST", body: formData });
-
+        var socket = io();
+        socket.emit('create-story', {
+            name: storedUsername,
+            text: e.target.querySelector("#text").value
+        });
         refreshStories();
     });
 
