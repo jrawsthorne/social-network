@@ -28,6 +28,7 @@ window.onload = async () => {
         e.preventDefault();
 
         const text = e.target.querySelector("#text").value;
+        const username = window.localStorage.getItem("username");
 
         const formData = new FormData();
         const photos = document.querySelector('input[type="file"][multiple]');
@@ -40,7 +41,7 @@ window.onload = async () => {
         await fetch("/api/stories", { method: "POST", body: formData });
         var socket = io();
         socket.emit('create-story', {
-            name: storedUsername,
+            name: username,
             text: e.target.querySelector("#text").value
         });
         refreshStories();
