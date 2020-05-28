@@ -84,7 +84,7 @@ async function verifyLogin() {
     const storedUsername = window.localStorage.getItem("username");
     
     if (storedUsername) {
-        document.getElementById("greeting").innerText = `Hello ${storedUsername}`;
+        document.getElementById("greeting").innerText = `Hello, ${storedUsername}!`;
     }
 
     // if client is offline unable to verify user status
@@ -105,7 +105,7 @@ async function verifyLogin() {
             window.location = "/login";
         } else {
             window.localStorage.setItem("username", username);
-            document.getElementById("greeting").innerText = `Hello ${username}`;
+            document.getElementById("greeting").innerText = `Hello, ${username}!`;
         }
 
     } else {

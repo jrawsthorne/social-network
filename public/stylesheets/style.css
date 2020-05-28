@@ -25,6 +25,9 @@ a {
 .main {
   margin-top: 1em;
 }
+.btn-padding {
+  padding-bottom: 5px;
+}
 
 .image-padding {
   padding: 5px;
@@ -36,6 +39,6 @@ img {
   height: auto;
   max-width: 100%;
   max-height: 400px;
-  border-radius: 2px;
+  border-radius: 3px;
   border: 1px solid lightgray;
 }
