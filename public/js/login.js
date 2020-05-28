@@ -1,10 +1,8 @@
 window.onload = async () => {
 
-    /**
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./service-worker.js');
     }
-    */
 
     document.querySelector("form#login").addEventListener("submit", async e => {
         e.preventDefault();

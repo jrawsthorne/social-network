@@ -1,6 +1,11 @@
-const cacheName = 'social-v1';
+const cacheName = 'social-v2';
 const staticAssets = [
+    "./manifest.json",
     "./",
+    "./me",
+    "./login",
+    "./register",
+    "./socket.io/socket.io.js",
     "./stylesheets/style.css",
     "./js/app.js",
     "./js/database.js",

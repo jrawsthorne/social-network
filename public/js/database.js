@@ -121,7 +121,7 @@ async function storeStoryCachedData(storyObject) {
  * Does not return anything
  * @see [Story]
  */
-function getGlobalAllStories() {
+async function getGlobalAllStories() {
     if (dbPromise) {
         dbPromise.then(function (db) {
             var tx = db.transaction(STORIES_STORE_NAME, 'readonly');
@@ -168,7 +168,7 @@ async function getOtherUserStories(username) {
  * @param {String} username
  * @see [Story]
  */
-function getPersonalStories(username) {
+async function getPersonalStories(username) {
     if (dbPromise) {
         dbPromise.then(async db => {
             var tx = db.transaction(STORIES_STORE_NAME, 'readonly');
@@ -190,7 +190,7 @@ function getPersonalStories(username) {
  * @param {[Object]} stories list of Stories to render
  * @see [Story] Renders the stories provided
  */
-function renderStoriesWithoutPhotos(stories) {
+async function renderStoriesWithoutPhotos(stories) {
     var sDiv = document.querySelector(".stories");
 
     sDiv.textContent = "";

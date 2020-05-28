@@ -13,7 +13,13 @@ window.addEventListener('offline', function(e) {
  */
 window.addEventListener('online', function(e) {
     console.log("You are online");
-    verifyLogin();
+
+    // If client is at the Login / Register page no need to verify login
+    path = window.location.pathname;
+    if (path !== "/login" && path !== "/register") {
+        verifyLogin();
+    }
+
     hideOfflineWarning();
 }, false);
 
@@ -51,12 +57,15 @@ function renderStories(stories) {
         text.innerHTML = story.text;
 
         const photos = document.createElement("div");
+        photos.classList = "row image-padding"
 
         for (const photo of story.images) {
+            const column = document.createElement("div");
+            column.classList = "col-xs-12 col-sm-4 col-md-4"
             const img = document.createElement("img");
             img.src = photo;
-            img.width = 250;
-            photos.appendChild(img);
+            column.appendChild(img);
+            photos.appendChild(column);
         }   
 
         outer.appendChild(by);

@@ -1,0 +1,9 @@
+{
+    "name": "CoronaSocial",
+    "short_name": "CoronaSocial",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#fff",
+    "theme_color": "#e3f2fd",
+    "description": "A social media application to share stories developed for the COM3504 Module at the University of Sheffield."
+  }
