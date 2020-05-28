@@ -33,18 +33,26 @@ window.onload = async () => {
         const formData = new FormData();
         const photos = document.querySelector('input[type="file"][multiple]');
 
-        formData.append("text", text);
-        for (const file of photos.files) {
-            formData.append("photos", file);
-        }
+        console.log(photos.files);
 
-        await fetch("/api/stories", { method: "POST", body: formData });
-        var socket = io();
-        socket.emit('create-story', {
-            name: username,
-            text: e.target.querySelector("#text").value
-        });
-        refreshStories();
+        if (photos.files.length > 3) {
+            alert("The number of files is over the 3 file limit");
+        } else {
+
+            formData.append("text", text);
+            for (const file of photos.files) {
+                formData.append("photos", file);
+            }
+
+            await fetch("/api/stories", { method: "POST", body: formData });
+            var socket = io();
+            socket.emit('create-story', {
+                name: username,
+                text: e.target.querySelector("#text").value
+            });
+            refreshStories();
+
+        }
     });
 
     refreshStories();
