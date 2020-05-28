@@ -1,19 +1,5 @@
-// import { openDB } from "./idb.js";
 let finalUsername = "";
 const storiesDiv = document.getElementById("stories");
-// const db = openDB("CoronaSocial", 1, {
-//     upgrade(db) {
-//         // Create a store of objects
-//         const store = db.createObjectStore('stories', {
-//             // The 'id' property of the object will be the key.
-//             keyPath: '_id',
-//             // If it isn't explicitly set, create a value by auto incrementing.
-//             autoIncrement: false,
-//         });
-//         // Create an index on the 'date' property of the objects.
-//         store.createIndex('createdAt', 'createdAt');
-//     },
-// });
 
 async function login() {
     const storedUsername = window.localStorage.getItem("username");
@@ -45,36 +31,58 @@ async function login() {
 
 let recommendedFilter = false;
 
-async function refreshStories() {
-    const sDiv = document.querySelector(".stories");
+async function fetchStories() {
 
     const apiUrl = recommendedFilter ? "/api/stories/recommended" : "/api/stories";
 
     const latestJson = await fetch(apiUrl);
     const latest = await latestJson.json();
 
+    renderStories(latest.data);
+
+    storeStoriesCachedData(latest.data)
+}
+
+function renderStories(stories) {
+    var sDiv = document.querySelector(".stories");
+
     sDiv.textContent = "";
 
-    for (const story of latest.data) {
+    for (const story of stories) {
         const outer = document.createElement("div");
         outer.classList = "story container border";
         const by = document.createElement("small");
-        by.innerHTML = `By ${story.author.username}`;
+        by.innerHTML = `By <b>${story.author.username}</b> at ${new Date(story.createdAt)}`;
         const text = document.createElement("p");
         text.innerHTML = story.text;
 
+        const photos = document.createElement("div");
 
-        outer.appendChild(text);
+        for (const photo of story.images) {
+            const img = document.createElement("img");
+            img.src = photo;
+            img.width = 250;
+            photos.appendChild(img);
+        }
+
         outer.appendChild(by);
-
+        outer.appendChild(text);
+        outer.appendChild(photos);
 
         sDiv.appendChild(outer);
     }
 }
 
+async function refreshStories() {
+    fetchStories().catch(error => {
+        let username = window.localStorage.getItem('username');
+        getOtherUserStories(username);
+    });
+}
+
 window.onload = async () => {
 
-    refreshStories();
+    login();
 
     document.getElementById("toggle-sort").addEventListener("click", async () => {
         recommendedFilter = !recommendedFilter;
@@ -93,6 +101,19 @@ window.onload = async () => {
         window.location = "/login";
     })
 
+    /**
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js');
+    }
+    */
+
+    //check for support
+    if ('indexedDB' in window) {
+        initDatabase();
+    } else {
+        console.log('This browser doesn\'t support IndexedDB');
+    }
+
     // $(document).ready(function () {
     //     var socket = io();
     //     $('#like').submit(function (e) {
@@ -107,11 +128,7 @@ window.onload = async () => {
     //     });
     // });
 
-    login();
-
-    // if ('serviceWorker' in navigator) {
-    //    navigator.serviceWorker.register('./service-worker.js');
-    //}
+    refreshStories();
 
     // const cached = await (await db).getAllFromIndex("stories", "createdAt");
     // drawStories(cached);

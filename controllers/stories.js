@@ -5,6 +5,11 @@ const Ranking = require("../CollectiveIntelligence/Ranking");
 const ObjectId = require("mongoose").Types.ObjectId;
 const multer = require('multer');
 
+/**
+ * Defines Storage Location and filename for uploads
+ * Stores files in an uploads folder
+ * Each File starts with a randomly generated Prefix and ends with the original filename
+ */
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
