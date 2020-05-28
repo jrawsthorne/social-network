@@ -89,7 +89,7 @@ async function like(req, res) {
 
     try {
 
-        const { story: storyId, rating } = req.body;
+        const { storyId, rating } = req.body;
         const user = req.user;
 
         let story = await Story.findById(storyId).exec();

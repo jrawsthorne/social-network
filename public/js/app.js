@@ -2,7 +2,7 @@
  * When the client gets off-line, it shows an off line warning to the user
  * so that it is clear that the data is not updating
  */
-window.addEventListener('offline', function(e) {
+window.addEventListener('offline', function (e) {
     // Queue up events for server.
     console.log("You are offline");
     showOfflineWarning();
@@ -11,7 +11,7 @@ window.addEventListener('offline', function(e) {
 /**
  * When the client gets online, it hides the off line warning
  */
-window.addEventListener('online', function(e) {
+window.addEventListener('online', function (e) {
     console.log("You are online");
     verifyLogin();
     hideOfflineWarning();
@@ -21,9 +21,9 @@ window.addEventListener('online', function(e) {
  * Updates a banner above the navigation bar indicating the client is offline
  * @see Row Row indicating the client is offline
  */
-function showOfflineWarning(){
-    if (document.getElementById('offline')!=null) {
-        document.getElementById('offline').style.display='block';
+function showOfflineWarning() {
+    if (document.getElementById('offline') != null) {
+        document.getElementById('offline').style.display = 'block';
     }
 }
 
@@ -31,9 +31,9 @@ function showOfflineWarning(){
  * Remove a banner above the navigation bar
  * @see Row Row indicating the client is offline is removed
  */
-function hideOfflineWarning(){
-    if (document.getElementById('offline')!=null) {
-        document.getElementById('offline').style.display='none';
+function hideOfflineWarning() {
+    if (document.getElementById('offline') != null) {
+        document.getElementById('offline').style.display = 'none';
     }
 }
 
@@ -57,11 +57,59 @@ function renderStories(stories) {
             img.src = photo;
             img.width = 250;
             photos.appendChild(img);
-        }   
+        }
+
+        const likesCount = document.createElement("span");
+        likesCount.innerText = `${story.likes.length} likes`;
+        likesCount.title = story.likes.map(like => `${like.user.username} (${like.rating})`).join(", ")
+
+        const currentUser = localStorage.getItem("username");
+        const currentUserLike = story.likes.find(like => like.user.username === currentUser);
+
+        const like = document.createElement("input");
+        like.disabled = currentUserLike !== undefined;
+        like.type = "number";
+        like.max = 5;
+        like.min = 0;
+        like.placeholder = 5;
+
+        if (currentUserLike) {
+            like.value = currentUserLike.rating;
+        }
+
+        const likeButton = document.createElement("button");
+        likeButton.innerText = currentUserLike === undefined ? "Like" : `Already liked (${currentUserLike.rating})`;
+
+        if (currentUserLike) {
+            likeButton.disabled = true;
+        }
+
+        likeButton.addEventListener("click", async () => {
+            try {
+                await fetch("/api/stories/like", {
+                    method: "POST", body: JSON.stringify({ storyId: story._id, rating: like.value }), headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+                likeButton.disabled = true;
+                like.disabled = true;
+                likesCount.innerText = `${story.likes.length + 1} likes`;
+                likeButton.innerText = `Already liked (${like.value})`;
+            } catch (e) {
+                console.error(e);
+            }
+
+        });
 
         outer.appendChild(by);
         outer.appendChild(text);
         outer.appendChild(photos);
+        outer.appendChild(likesCount);
+
+        if (currentUser !== story.author.username) {
+            outer.appendChild(like);
+            outer.appendChild(likeButton);
+        }
 
         sDiv.appendChild(outer);
     }
@@ -73,7 +121,7 @@ function renderStories(stories) {
 async function verifyLogin() {
 
     const storedUsername = window.localStorage.getItem("username");
-    
+
     if (storedUsername) {
         document.getElementById("greeting").innerText = `Hello ${storedUsername}`;
     }
