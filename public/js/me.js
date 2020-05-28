@@ -33,8 +33,6 @@ window.onload = async () => {
         const formData = new FormData();
         const photos = document.querySelector('input[type="file"][multiple]');
 
-        console.log(photos.files);
-
         if (photos.files.length > 3) {
             alert("The number of files is over the 3 file limit");
         } else {
@@ -62,6 +60,7 @@ window.onload = async () => {
 async function refreshStories() {
     fetchStories().catch(error => {
         const storedUsername = window.localStorage.getItem("username");
+        showOfflineWarning();
         getPersonalStories(storedUsername);
     });
 }
