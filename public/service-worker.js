@@ -1,10 +1,18 @@
-const cacheName = 'social-v1';
+const cacheName = 'social-v2';
 const staticAssets = [
+    "./manifest.json",
     "./",
+    "./me",
+    "./login",
+    "./register",
+    "./favicon.ico",
     "./stylesheets/style.css",
+    "./socket.io/socket.io.js",
     "./js/app.js",
     "./js/database.js",
     "./js/index.js",
+    "./js/login.js",
+    "./js/register.js",
     "./js/idb.js",
     "./js/me.js",
     "./js/wrap-idb-value.js"

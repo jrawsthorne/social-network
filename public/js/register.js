@@ -1,4 +1,9 @@
 window.onload = async () => {
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./service-worker.js');
+    }
+
     document.querySelector("form#register").addEventListener("submit", async e => {
         e.preventDefault();
         const username = e.target.querySelector("#username").value;
