@@ -62,7 +62,7 @@ function renderStories(stories) {
 
         for (const photo of story.images) {
             const column = document.createElement("div");
-            column.classList = "col-xs-12 col-sm-4 col-md-4"
+            column.classList = "col-xs-12 col-sm-4 col-md-4 mobile-sm-padding";
             const img = document.createElement("img");
             img.src = photo;
             column.appendChild(img);
@@ -123,7 +123,7 @@ function renderStories(stories) {
         outer.appendChild(by);
         outer.appendChild(text);
 
-        if (story.photos) {
+        if (story.images.length) {
             outer.appendChild(photos);
         }
 
