@@ -103,6 +103,7 @@ async function like(req, res) {
             return res.status(404).json({ error: "No story found" });
         }
 
+        // Cannot like own story
         if (story.author === req.user._id) {
             return res.status(400).json({ error: "Can't like own story" });
         }

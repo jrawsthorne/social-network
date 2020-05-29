@@ -17,6 +17,7 @@ window.onload = async () => {
                 }
             });
             if (res.ok) {
+                // Store users username via local storage & redirect to stories wall
                 const { username } = await res.json();
                 window.localStorage.setItem("username", username);
                 window.location = "/";

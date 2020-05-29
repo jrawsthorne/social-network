@@ -35,7 +35,7 @@ function showOfflineWarning() {
 }
 
 /**
- * Remove a banner above the navigation bar
+ * Remove offline banner above the navigation bar
  * @see Row Row indicating the client is offline is removed
  */
 function hideOfflineWarning() {
@@ -44,6 +44,9 @@ function hideOfflineWarning() {
     }
 }
 
+/**
+*  Renders stories with: text, images, author, likes & date
+*/
 function renderStories(stories) {
     var sDiv = document.querySelector(".stories");
 
@@ -99,10 +102,12 @@ function renderStories(stories) {
         likeButton.innerText = currentUserLike === undefined ? "Like" : `Already liked (${currentUserLike.rating})`;
         likeButton.className = "btn btn-primary"
 
+        // If already liked, disable button
         if (currentUserLike) {
             likeButton.disabled = true;
         }
 
+        // Handle liking
         likeButton.addEventListener("click", async e => {
             e.preventDefault();
             try {
@@ -129,6 +134,7 @@ function renderStories(stories) {
 
         form.appendChild(likesCount);
 
+        // Don't allow user to like own posts
         if (currentUser !== story.author.username) {
             likeContainer.appendChild(like)
             form.appendChild(likeContainer);

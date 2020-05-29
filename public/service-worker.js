@@ -18,6 +18,7 @@ const staticAssets = [
     "./js/wrap-idb-value.js"
 ]
 
+// Allow website to work offline
 self.addEventListener("install", async e => {
     const cache = await caches.open(cacheName);
     await cache.addAll(staticAssets);
@@ -28,7 +29,7 @@ self.addEventListener("activate", e => {
     self.clients.claim();
 })
 
-// TODO: Figure out caching strategy
+// Intercepts fetch requests and caches them, except stories
 self.addEventListener("fetch", async e => {
     const req = e.request;
     const url = new URL(req.url);
@@ -48,6 +49,7 @@ async function cacheFirst(req) {
     return cached || fetch(req);
 }
 
+// Retrieve from network, if not: cache
 async function networkAndCache(req) {
     const cache = await caches.open(cacheName);
     try {
