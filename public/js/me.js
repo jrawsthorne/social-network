@@ -12,11 +12,11 @@ window.onload = async () => {
         window.location = "/login";
     })
 
-    
+
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./service-worker.js');
     }
-    
+
     //check for support
     if ('indexedDB' in window) {
         initDatabase();
@@ -62,11 +62,14 @@ window.onload = async () => {
 
 // Handles refreshing of personal stories
 async function refreshPersonalStories() {
-    fetchPersonalStories().catch(error => {
-        const storedUsername = window.localStorage.getItem("username");
+    const storedUsername = window.localStorage.getItem("username");
+    getPersonalStories(storedUsername);
+
+    try {
+        await fetchPersonalStories();
+    } catch (e) {
         showOfflineWarning();
-        getPersonalStories(storedUsername);
-    });
+    }
 }
 
 // Fetches personal stories chronologically

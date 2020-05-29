@@ -19,11 +19,16 @@ async function fetchOtherUserStories() {
 
 // Handles refreshing of stories
 async function refreshOtherUserStories() {
-    fetchOtherUserStories().catch(error => {
+
+    const username = window.localStorage.getItem('username');
+    if (username) getOtherUserStories(username);
+
+    try {
+        await fetchOtherUserStories();
+    } catch (e) {
         showOfflineWarning();
-        const username = window.localStorage.getItem('username');
-        getOtherUserStories(username);
-    });
+    }
+
 }
 
 window.onload = async () => {
@@ -63,9 +68,9 @@ window.onload = async () => {
 
     // Handles socket io, alerts the user to new posts
     let socket = io();
-    socket.on('new-story', function(data){
+    socket.on('new-story', function (data) {
         let alertWindow = document.getElementById("alertWindow");
-        alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: '+data.from+'.<a onClick="location.reload()" href=""><b><u> Click here to check it out!</u></b></a></div>'
+        alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: ' + data.from + '.<a onClick="location.reload()" href=""><b><u> Click here to check it out!</u></b></a></div>'
 
     });
 

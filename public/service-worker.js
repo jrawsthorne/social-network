@@ -32,20 +32,34 @@ self.addEventListener("activate", e => {
 // Intercepts fetch requests and caches them, except stories
 self.addEventListener("fetch", async e => {
     const req = e.request;
-    e.respondWith(staleWhileFetching(req));
+    const url = new URL(req.url);
+
+    // local URLs use cacheFirst strategy
+    if (url.origin === location.origin) {
+        e.respondWith(cacheFirst(req));
+    }
+    // remote URLs use networkAndCache stategy
+    else {
+        e.respondWith(networkAndCache(req));
+    }
 })
 
-// Serves stale content which is refreshed and displayed on next load
-async function staleWhileFetching(req) {
+// Fetches from the cache or makes a network request if not available
+async function cacheFirst(req) {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(req);
-    (async () => {
-        // update the cache with fresh content
-        try {
-            const fresh = await fetch(req);
-            await cache.put(req, fresh);
-        } catch (e) { }
-    })();
-    // if req cached return cached otherwise make a network request
     return cached || fetch(req);
+}
+
+// Fetches from the network then caches
+async function networkAndCache(req) {
+    const cache = await caches.open(cacheName);
+    try {
+        const fresh = await fetch(req);
+        await cache.put(req, fresh.clone());
+        return fresh;
+    } catch (e) {
+        const cached = await cache.match(req);
+        return cached;
+    }
 }
