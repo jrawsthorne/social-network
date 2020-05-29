@@ -52,6 +52,8 @@ function hideOfflineWarning() {
 
 /**
 *  Renders stories with: text, images, author, likes & date
+*  @param {[Story]} stories A collection of Story Objects
+*  @see [Story] A collection of rendered boxes with story information
 */
 function renderStories(stories) {
     var sDiv = document.querySelector(".stories");
@@ -93,6 +95,13 @@ function renderStories(stories) {
     }
 }
 
+/**
+ * This function deals with creation of like elements for each story
+ * If the client is not online this function will return a form that will be unable to submit and
+ * the like counter disabled
+ * @param {Story} story A story Object to generate Likes for
+ * @return A form html element containing the relevant information for the story
+ */
 function renderLikes(story) {
     const form = document.createElement("form");
     form.className = "form-inline";
@@ -117,7 +126,7 @@ function renderLikes(story) {
     like.disabled = currentUserLike !== undefined;
     like.type = "number";
     like.max = 5;
-    like.min = 0;
+    like.min = 1;
 
     if (currentUserLike) {
         like.value = currentUserLike.rating;
@@ -127,6 +136,7 @@ function renderLikes(story) {
         like.value = 5;
     }
 
+    // If not online unable to properly perform likes and disable the button
     if (navigator.onLine) {
         // Handle liking
         likeButton.addEventListener("click", async e => {
