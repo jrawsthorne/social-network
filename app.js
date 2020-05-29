@@ -68,11 +68,13 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
 
 
-// Starts Socket.io service
+// Starts Socket.io
 var io = require('socket.io').listen(server);
+
 
 io.on('connection', async function (socket) {
   socket.on('create-story', function (storyPackage) {
     socket.broadcast.emit('new-story',{from:storyPackage.name});
   });
+
 });
