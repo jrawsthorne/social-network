@@ -203,8 +203,19 @@ async function renderStoriesWithoutPhotos(stories) {
         const text = document.createElement("p");
         text.innerHTML = story.text;
 
+        const likesCount = document.createElement("span");
+        likesCount.className = "mr-2"
+        likesCount.innerText = `${story.likes.length} likes`;
+        likesCount.title = story.likes.map(like => `${like.user.username} (${like.rating})`).join("\n")
+
+        const form = document.createElement("form");
+        form.className = "form-inline";
+
+        form.appendChild(likesCount);
+
         outer.appendChild(by);
         outer.appendChild(text);
+        outer.appendChild(form);
 
         sDiv.appendChild(outer);
     }

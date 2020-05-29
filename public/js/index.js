@@ -18,6 +18,7 @@ async function fetchStories() {
 async function refreshStories() {
     fetchStories().catch(error => {
         const username = window.localStorage.getItem('username');
+        showOfflineWarning();
         getOtherUserStories(username);
     });
 }
@@ -26,7 +27,8 @@ window.onload = async () => {
 
     verifyLogin();
 
-    document.getElementById("toggle-sort").addEventListener("click", async () => {
+    document.getElementById("toggle-sort").addEventListener("click", async e => {
+        e.preventDefault();
         recommendedFilter = !recommendedFilter;
         document.getElementById("toggle-sort").disabled = true;
         await refreshStories();
@@ -67,57 +69,4 @@ window.onload = async () => {
 
     refreshStories();
 
-    // const cached = await (await db).getAllFromIndex("stories", "createdAt");
-    // drawStories(cached);
-
-
-    // // const cachedIds = new Set();
-    // // cached.forEach(story => cachedIds.add(story._id));
-
-    // console.log(document.getElementById("stories"))
-
-
-    // const stories = await getStories();
-
-    // const newStories = stories.filter(story => !cachedIds.has(story._id));
-
-    // if (newStories.length) {
-
-    // console.log(document.getElementById("stories"))
-
-    // for (const story of storiesDiv.children) {
-    //     story.remove();
-    // }
-
-    // drawStories(stories);
-    // try {
-    //     await cacheStories(stories);
-    // } catch (e) {
-    //     console.error(e)
-    // }
-
-}
-
-async function getStories() {
-    const res = await fetch("/stories");
-    const json = await res.json();
-    return json;
-}
-
-async function cacheStories(stories) {
-    const tx = (await db).transaction("stories", "readwrite");
-    for (const story of stories) {
-        tx.store.add(story);
-    }
-    await tx.done;
-}
-
-function drawStories(stories) {
-    for (const story of stories) {
-        const s = storyTemplate.content.cloneNode(true);
-        s.getElementById("author").textContent = `by ${story.author.username}`;
-        s.getElementById("text").textContent = story.text;
-        s.getElementById("created").textContent = story.createdAt;
-        storiesDiv.appendChild(s);
-    }
 }

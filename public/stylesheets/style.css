@@ -14,8 +14,18 @@ a {
   margin-bottom: 1em;
 }
 
+.form-inline {
+  margin-bottom: 5px;
+}
+
 .create {
   margin-top: 1em;
+}
+
+@media (max-width: 992px) {
+  .mobile-sm-padding {
+      margin-bottom: 5px; 
+  }
 }
 
 .login {
@@ -25,6 +35,11 @@ a {
 .main {
   margin-top: 1em;
 }
+
+.form-width-override {
+  width: inherit;
+}
+
 .btn-padding {
   padding-bottom: 5px;
 }
