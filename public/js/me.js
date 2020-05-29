@@ -63,7 +63,7 @@ window.onload = async () => {
 // Handles refreshing of personal stories
 async function refreshPersonalStories() {
     const storedUsername = window.localStorage.getItem("username");
-    getPersonalStories(storedUsername);
+    if (username) getPersonalStories(storedUsername);
 
     try {
         await fetchPersonalStories();
