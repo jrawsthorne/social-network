@@ -17,8 +17,14 @@ window.addEventListener('online', function (e) {
     // If client is at the Login / Register page no need to verify login
     path = window.location.pathname;
     if (path !== "/login" && path !== "/register") {
+
         verifyLogin();
-        refreshStories();
+
+        if (path === "/") {
+            refreshOtherUserStories();
+        } else if (path === "/me") {
+            refreshPersonalStories();
+        }
     }
 
     hideOfflineWarning();

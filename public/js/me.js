@@ -51,28 +51,28 @@ window.onload = async () => {
                 name: username,
                 text: e.target.querySelector("#text").value
             });
-            refreshStories();
+            refreshPersonalStories();
 
         }
     });
 
-    refreshStories();
+    refreshPersonalStories();
 
 }
 
-// Handles refreshing of stories
-async function refreshStories() {
-    fetchStories().catch(error => {
+// Handles refreshing of personal stories
+async function refreshPersonalStories() {
+    fetchPersonalStories().catch(error => {
         const storedUsername = window.localStorage.getItem("username");
         showOfflineWarning();
         getPersonalStories(storedUsername);
     });
 }
 
-// Fetches stories chronologically or by recoomendation determined by user
+// Fetches personal stories chronologically
 // Renders stories
 // Stores in cache
-async function fetchStories() {
+async function fetchPersonalStories() {
 
     const storedUsername = window.localStorage.getItem("username");
 

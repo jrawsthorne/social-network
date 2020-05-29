@@ -6,7 +6,7 @@ let recommendedFilter = false;
 // Fetches stories chronologically or by recoomendation determined by user
 // Renders stories
 // Stores in cache
-async function fetchStories() {
+async function fetchOtherUserStories() {
     const apiUrl = recommendedFilter ? "/api/stories/recommended" : "/api/stories";
 
     const latestJson = await fetch(apiUrl);
@@ -18,10 +18,10 @@ async function fetchStories() {
 }
 
 // Handles refreshing of stories
-async function refreshStories() {
-    fetchStories().catch(error => {
-        const username = window.localStorage.getItem('username');
+async function refreshOtherUserStories() {
+    fetchOtherUserStories().catch(error => {
         showOfflineWarning();
+        const username = window.localStorage.getItem('username');
         getOtherUserStories(username);
     });
 }
@@ -35,7 +35,7 @@ window.onload = async () => {
         e.preventDefault();
         recommendedFilter = !recommendedFilter;
         document.getElementById("toggle-sort").disabled = true;
-        await refreshStories();
+        await refreshOtherUserStories();
         document.getElementById("toggle-sort").disabled = false;
         document.getElementById("sort-text").innerHTML = `Sorting by ${recommendedFilter ? "recommended" : "latest"}`;
     });
@@ -69,6 +69,5 @@ window.onload = async () => {
 
     });
 
-    refreshStories();
-
+    refreshOtherUserStories();
 }

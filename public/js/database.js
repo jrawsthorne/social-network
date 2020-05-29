@@ -94,26 +94,6 @@ async function storeStoryCachedData(storyObject) {
 }
 
 /**
- * Render every story in the IndexDB using the renderStoriesWithoutPhotos function
- * Does not return anything
- * @see [Story]
- */
-async function getGlobalAllStories() {
-    if (dbPromise) {
-        dbPromise.then(function (db) {
-            let tx = db.transaction(STORIES_STORE_NAME, 'readonly');
-            let store = tx.objectStore(STORIES_STORE_NAME);
-            return store.getAll();
-        }).then(function (returnedStories) {
-            returnedStories = returnedStories.reverse();
-            if (returnedStories) {
-                renderStoriesWithoutPhotos(returnedStories);
-            }
-        });
-    }
-}
-
-/**
  * Loads a list of Story Objects from the IndexDB database and filters the stories
  * removing all stories with an author that has a matching username after will render them using the renderStoriesWithoutPhotos function
  * Does not return anything
