@@ -28,34 +28,22 @@ self.addEventListener("activate", e => {
     self.clients.claim();
 })
 
-// TODO: Figure out caching strategy
 self.addEventListener("fetch", async e => {
     const req = e.request;
-    const url = new URL(req.url);
-
-    if (url.origin === location.origin && url.pathname === "/stories") {
-        e.respondWith(fetch(req))
-    } else if (url.origin === location.origin) {
-        e.respondWith(cacheFirst(req));
-    } else {
-        e.respondWith(networkAndCache(req));
-    }
+    e.respondWith(staleWhileFetching(req));
 })
 
-async function cacheFirst(req) {
+// Serves stale content which is refreshed and displayed on next load
+async function staleWhileFetching(req) {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(req);
+    (async () => {
+        // update the cache with fresh content
+        try {
+            const fresh = await fetch(req);
+            await cache.put(req, fresh);
+        } catch (e) { }
+    })();
+    // if req cached return cached otherwise make a network request
     return cached || fetch(req);
-}
-
-async function networkAndCache(req) {
-    const cache = await caches.open(cacheName);
-    try {
-        const fresh = await fetch(req);
-        await cache.put(req, fresh.clone());
-        return fresh;
-    } catch (e) {
-        const cached = await cache.match(req);
-        return cached;
-    }
 }
