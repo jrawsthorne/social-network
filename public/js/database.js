@@ -1,27 +1,4 @@
-/**
- * This database receives stories from the server the following structure
- * Story = {
- *  _id
- *  __v
- *  text
- *  author: {
- *    username
- *    id
- *  }
- *  likes: [{
- *    rating
- *    user {
- *      username
- *       _id
- *    }
- *    _id
- *  }]
- *  updatedAt
- *  createdAt
- * }
- */
-
-var dbPromise;
+let dbPromise;
 
 // DB NAME
 const DB_NAME = "db_story";
@@ -33,7 +10,7 @@ const STORIES_STORE_NAME = "store_stories";
 function initDatabase() {
     dbPromise = idb.openDb(DB_NAME, 7, function (upgradeDb) {
         if (!upgradeDb.objectStoreNames.contains(STORIES_STORE_NAME)) {
-            var storeDB = upgradeDb.createObjectStore(STORIES_STORE_NAME, {keyPath: '_id', autoIncrement: false});
+            let storeDB = upgradeDb.createObjectStore(STORIES_STORE_NAME, {keyPath: '_id', autoIncrement: false});
             storeDB.createIndex('createdAt', 'createdAt', {unique: false});
             storeDB.createIndex('author', 'author.username', {unique: false});
         }
@@ -45,7 +22,7 @@ function initDatabase() {
  * @return {Date} date exactly 28 days ago
  */
 function calcDeleteDate() {
-    var deleteDate = new Date();
+    let deleteDate = new Date();
     return deleteDate.setDate(deleteDate.getDate() - 28);
 }
 
@@ -59,9 +36,9 @@ async function flushOldStories() {
 
     if (dbPromise) {
         dbPromise.then(function (db) {
-            var tx = db.transaction(STORIES_STORE_NAME, 'readwrite');
-            var store = tx.objectStore(STORIES_STORE_NAME);
-            var index = store.index('createdAt');
+            let tx = db.transaction(STORIES_STORE_NAME, 'readwrite');
+            let store = tx.objectStore(STORIES_STORE_NAME);
+            let index = store.index('createdAt');
             return index.openCursor();
         }).then(function filterStories(cursor) {
             if (!cursor) {
@@ -90,8 +67,8 @@ async function flushOldStories() {
  * @param {[Object]} storyObjects list of story objects you wish to store
  */
 async function storeStoriesCachedData(storyObjects) {
-    for (var i = 0; i < storyObjects.length; i++) {
-        var storyObject = storyObjects[i];
+    for (let i = 0; i < storyObjects.length; i++) {
+        let storyObject = storyObjects[i];
         storeStoryCachedData(storyObject);
     }
     flushOldStories()
@@ -103,8 +80,8 @@ async function storeStoriesCachedData(storyObjects) {
 async function storeStoryCachedData(storyObject) {
     if (dbPromise) {
         dbPromise.then(async db => {
-            var tx = db.transaction(STORIES_STORE_NAME, 'readwrite');
-            var store = tx.objectStore(STORIES_STORE_NAME);
+            let tx = db.transaction(STORIES_STORE_NAME, 'readwrite');
+            let store = tx.objectStore(STORIES_STORE_NAME);
             await store.put(storyObject);
             return tx.complete;
         }).then(function () {
@@ -124,8 +101,8 @@ async function storeStoryCachedData(storyObject) {
 async function getGlobalAllStories() {
     if (dbPromise) {
         dbPromise.then(function (db) {
-            var tx = db.transaction(STORIES_STORE_NAME, 'readonly');
-            var store = tx.objectStore(STORIES_STORE_NAME);
+            let tx = db.transaction(STORIES_STORE_NAME, 'readonly');
+            let store = tx.objectStore(STORIES_STORE_NAME);
             return store.getAll();
         }).then(function (returnedStories) {
             returnedStories = returnedStories.reverse();
@@ -146,13 +123,13 @@ async function getGlobalAllStories() {
 async function getOtherUserStories(username) {
     if (dbPromise) {
         dbPromise.then(function (db) {
-            var tx = db.transaction(STORIES_STORE_NAME, 'readonly');
-            var store = tx.objectStore(STORIES_STORE_NAME);
+            let tx = db.transaction(STORIES_STORE_NAME, 'readonly');
+            let store = tx.objectStore(STORIES_STORE_NAME);
             return store.getAll(); 
         }).then(function filterUserStories(stories) {
             stories = stories.reverse() // Order stories in reverse chronological order
 
-            var other_user_stories = stories.filter(function(story) {
+            let other_user_stories = stories.filter(function(story) {
                 return story.author.username != username;
             });
 
@@ -171,9 +148,9 @@ async function getOtherUserStories(username) {
 async function getPersonalStories(username) {
     if (dbPromise) {
         dbPromise.then(async db => {
-            var tx = db.transaction(STORIES_STORE_NAME, 'readonly');
-            var store = tx.objectStore(STORIES_STORE_NAME);
-            var index = store.index('author');
+            let tx = db.transaction(STORIES_STORE_NAME, 'readonly');
+            let store = tx.objectStore(STORIES_STORE_NAME);
+            let index = store.index('author');
             return await index.getAll(IDBKeyRange.only(username)); // only return stories with matching username on author index
         }).then(function (returnedStories) {
             if (returnedStories) {
@@ -191,9 +168,9 @@ async function getPersonalStories(username) {
  * @see [Story] Renders the stories provided
  */
 async function renderStoriesWithoutPhotos(stories) {
-    var sDiv = document.querySelector(".stories");
+    const storiesDiv = document.querySelector(".stories");
 
-    sDiv.textContent = "";
+    storiesDiv.textContent = "";
 
     for (const story of stories) {
         const outer = document.createElement("div");
@@ -217,6 +194,6 @@ async function renderStoriesWithoutPhotos(stories) {
         outer.appendChild(text);
         outer.appendChild(form);
 
-        sDiv.appendChild(outer);
+        storiesDiv.appendChild(outer);
     }
 }

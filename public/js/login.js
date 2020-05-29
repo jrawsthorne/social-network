@@ -17,6 +17,7 @@ window.onload = async () => {
                 }
             });
             if (res.ok) {
+                // Store users username via local storage & redirect to stories wall
                 window.localStorage.setItem("username", username);
                 window.location = "/";
             } else if (res.status === 401) {

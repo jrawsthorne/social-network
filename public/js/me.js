@@ -30,11 +30,12 @@ window.onload = async () => {
         const text = e.target.querySelector("#text").value;
         const username = window.localStorage.getItem("username");
 
+        // Gather form data to submit via AJAX
         const formData = new FormData();
         const photos = document.querySelector('input[type="file"][multiple]');
 
         if (photos.files.length > 3) {
-            alert("The number of files is over the 3 file limit");
+            alert("The number of photos is over the 3 photo limit");
         } else {
 
             formData.append("text", text);
@@ -43,7 +44,9 @@ window.onload = async () => {
             }
 
             await fetch("/api/stories", { method: "POST", body: formData });
-            var socket = io();
+
+            // Handles socket io, alerts the user to new posts
+            let socket = io();
             socket.emit('create-story', {
                 name: username,
                 text: e.target.querySelector("#text").value
@@ -57,6 +60,7 @@ window.onload = async () => {
 
 }
 
+// Handles refreshing of stories
 async function refreshStories() {
     fetchStories().catch(error => {
         const storedUsername = window.localStorage.getItem("username");
@@ -65,6 +69,9 @@ async function refreshStories() {
     });
 }
 
+// Fetches stories chronologically or by recoomendation determined by user
+// Renders stories
+// Stores in cache
 async function fetchStories() {
 
     const storedUsername = window.localStorage.getItem("username");

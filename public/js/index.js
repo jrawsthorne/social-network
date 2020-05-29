@@ -3,8 +3,10 @@ const storiesDiv = document.getElementById("stories");
 
 let recommendedFilter = false;
 
+// Fetches stories chronologically or by recoomendation determined by user
+// Renders stories
+// Stores in cache
 async function fetchStories() {
-
     const apiUrl = recommendedFilter ? "/api/stories/recommended" : "/api/stories";
 
     const latestJson = await fetch(apiUrl);
@@ -15,6 +17,7 @@ async function fetchStories() {
     storeStoriesCachedData(latest.data)
 }
 
+// Handles refreshing of stories
 async function refreshStories() {
     fetchStories().catch(error => {
         const username = window.localStorage.getItem('username');
@@ -27,6 +30,7 @@ window.onload = async () => {
 
     verifyLogin();
 
+    // Toggles recommendation/chronologically filter
     document.getElementById("toggle-sort").addEventListener("click", async e => {
         e.preventDefault();
         recommendedFilter = !recommendedFilter;
@@ -36,6 +40,7 @@ window.onload = async () => {
         document.getElementById("sort-text").innerHTML = `Sorting by ${recommendedFilter ? "recommended" : "latest"}`;
     });
 
+    // Handles logout
     document.querySelector("a#logout").addEventListener("click", async e => {
         e.preventDefault();
         window.localStorage.removeItem("username");
@@ -56,16 +61,13 @@ window.onload = async () => {
         console.log('This browser doesn\'t support IndexedDB');
     }
 
-    // TODO Add refresh button
-    $(document).ready(function () {
-         var socket = io();
-         socket.on('new-story', function(data){
-             var alertWindow = document.getElementById("alertWindow");
-             console.log("HHHH")
-             alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: '+data.from+' check it out by refreshing your page! </div>'
+    // Handles socket io, alerts the user to new posts
+    let socket = io();
+    socket.on('new-story', function(data){
+        let alertWindow = document.getElementById("alertWindow");
+        alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: '+data.from+' check it out by refreshing your page! </div>'
 
-         });
-     });
+    });
 
     refreshStories();
 
