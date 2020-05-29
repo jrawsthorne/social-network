@@ -51,6 +51,8 @@ window.onload = async () => {
                 name: username,
                 text: e.target.querySelector("#text").value
             });
+
+            // refresh stories to show new post in the ui
             refreshPersonalStories();
 
         }

@@ -59,7 +59,7 @@ window.onload = async () => {
         navigator.serviceWorker.register('./service-worker.js');
     }
 
-    //check for support
+    // initialise the database if indexedDB is supported
     if ('indexedDB' in window) {
         initDatabase();
     } else {

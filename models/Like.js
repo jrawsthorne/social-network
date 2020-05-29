@@ -22,6 +22,7 @@ const Like = new mongoose.Schema(
     { timestamps: true }
 )
 
+// Enforce that a user can only like a story once
 Like.index({
     user: 1, story: 1
 }, { unique: true });

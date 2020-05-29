@@ -5,7 +5,8 @@ const User = new mongoose.Schema({
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }]
 });
 
-// Handles user password security
+// Helper that creates the register functionality 
+// including password hashing and salting
 User.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model('User', User);
