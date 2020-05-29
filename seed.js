@@ -31,8 +31,8 @@ const data = require("./public/Data/usersStoriesAndRatings.json");
 
     for (const user of data.users) {
         const dbUser = await User.findById(userIdMap[user.userId]).exec();
-        // this is super inefficient so I just did 10 likes for each user for now
-        for (const rating of user.ratings.slice(0, 10)) {
+
+        for (const rating of user.ratings) {
             const story = await Story.findById(storyIdMap[rating.storyId]).exec();
             const like = await Like.create({ story: story._id, user: dbUser._id, rating: rating.rating });
             await story.updateOne({ $push: { likes: { _id: like._id } } }).exec();
