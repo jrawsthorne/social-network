@@ -21,10 +21,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+// Define fields to be gathered from db
 const storyPopulate = { path: "author likes", select: "_id username rating", populate: { path: "user", select: "_id username" } };
 
 // @route GET /api/stories/latest
-// get all stories not by user
+// Get all stories not by user
+// SORTED: chronologically
 async function getLatestStories(req, res) {
     try {
         let stories = await Story.find({ author: { $ne: req.user._id } }).sort({ createdAt: "desc" }).populate(storyPopulate).exec();
@@ -42,7 +44,8 @@ async function getLatestStories(req, res) {
 }
 
 // @route GET /api/stories/:username
-// get stories by user
+// Get stories by user 
+// SORTED: chronologically
 async function getUserStories(req, res) {
     try {
         let user = await User.find({ username: req.params.username }).exec();
@@ -60,6 +63,7 @@ async function getUserStories(req, res) {
 }
 
 // @route POST /api/stories
+// Handles add story, uploads images
 async function addStory(req, res) {
     try {
 
@@ -85,6 +89,7 @@ async function addStory(req, res) {
 }
 
 // @route POST /api/stories/like/:storyId
+// Handles liking a story
 async function like(req, res) {
 
     try {
@@ -102,6 +107,7 @@ async function like(req, res) {
             return res.status(400).json({ error: "Can't like own story" });
         }
 
+        // Creates like, push likes to story and to user to be used for recommendation engine
         const like = await Like.create({ story: story._id, user: req.user._id, rating });
         await story.update({ $push: { likes: { _id: like._id } } }).exec();
         await user.update({ $push: { likes: { _id: like._id } } }).exec();
@@ -123,20 +129,23 @@ async function like(req, res) {
 }
 
 // @route GET /api/stories/recommended
-// get recommended stories for current user
+// Get recommended stories for current user
+// SORTED: by recommendation
 async function getRecommendedStories(req, res) {
     try {
 
+        // Get all users that have liked posts
         const allUsersWithLikes = await User.find().populate("likes", "-_id story rating").select("_id");
 
-        // format the data correctly for ranking
+        // format the data correctly for collaberative filtering
         const formattedLikes = {};
         for (const user of allUsersWithLikes) {
             formattedLikes[user._id] = user.likes.map(like => ({ [like.story]: like.rating }));
         }
 
+        // Call ranking algorithm
+        // DEFAULT: pearson
         const recommended = new Ranking().getRecommendations(formattedLikes, req.user._id, "sim_pearson");
-        console.log(recommended);
 
         const recommendedStoryIds = recommended.map(r => ObjectId(r.story));
 
@@ -147,6 +156,7 @@ async function getRecommendedStories(req, res) {
             return obj
         }, {});
 
+        // Push stories
         const stories = await Story.find({
             _id: {
                 $in: recommendedStoryIds

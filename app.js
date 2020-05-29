@@ -6,6 +6,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const session = require('express-session');
 const dotenv = require("dotenv");
 
+// Authentication:
 const User = require("./models/User");
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -13,6 +14,7 @@ passport.deserializeUser(User.deserializeUser());
 
 const connectDB = require("./config/db");
 
+// Updated config.env to change db destination
 dotenv.config({ path: "./config/config.env" });
 
 connectDB();
@@ -26,7 +28,7 @@ const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
-// TODO: CHANGE `secret` IN PROD
+
 app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -40,6 +42,8 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
+
+// Define routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/index.html`));
 });
@@ -56,38 +60,19 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/404.html`));
 });
 
-// // catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   const err = new Error("Not Found");
-//   err.status = 404;
-//   next(err);
-// });
 
-// // error handler
-// app.use(function (err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get("env") === "development" ? err : {};
-
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render("error");
-// });
-
+// Listen on port 3000 / process port
 const PORT = process.env.PORT || 3000;
 
+// Starts server
 const server = app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
 
+
+// Starts Socket.io service
 var io = require('socket.io').listen(server);
 
-
 io.on('connection', async function (socket) {
-  console.log('AAAA a user connected');
   socket.on('create-story', function (storyPackage) {
-    console.log("New story from " + storyPackage.name + " it reads: " + storyPackage.text);
     socket.broadcast.emit('new-story',{from:storyPackage.name});
-
-    // Post story to db
   });
-
 });

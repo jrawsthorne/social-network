@@ -2,6 +2,7 @@ const User = require("../models/User");
 const passport = require("passport");
 
 // @route POST /api/auth/register
+// Registers user and logs them in
 async function register(req, res) {
     const { username, password } = req.body;
     try {

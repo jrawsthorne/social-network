@@ -1,3 +1,8 @@
+/*
+    Calculate Pearson distance between two users based on preference matrix
+    Returns distance value
+*/
+
 const _ = require('lodash');
 
 module.exports = class Pearson {

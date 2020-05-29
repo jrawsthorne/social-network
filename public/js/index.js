@@ -54,6 +54,7 @@ window.onload = async () => {
         console.log('This browser doesn\'t support IndexedDB');
     }
 
+    // TODO Add refresh button
     $(document).ready(function () {
          var socket = io();
          socket.on('new-story', function(data){
