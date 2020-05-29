@@ -78,41 +78,56 @@ function renderStories(stories) {
             photos.appendChild(column);
         }
 
-        const form = document.createElement("form");
-        form.className = "form-inline";
+        const likesForm = renderLikes(story);
 
-        const likesCount = document.createElement("span");
-        likesCount.className = "mr-2"
-        likesCount.innerText = `${story.likes.length} likes`;
-        likesCount.title = story.likes.map(like => `${like.user.username} (${like.rating})`).join("\n")
+        outer.appendChild(by);
+        outer.appendChild(text);
 
-        const currentUser = localStorage.getItem("username");
-        const currentUserLike = story.likes.find(like => like.user.username === currentUser);
-
-        const likeContainer = document.createElement("span");
-        likeContainer.className = "mr-2 d-inline"
-
-        const like = document.createElement("input");
-        like.className = "form-control"
-        like.disabled = currentUserLike !== undefined;
-        like.type = "number";
-        like.max = 5;
-        like.min = 0;
-        like.value = 5;
-
-        if (currentUserLike) {
-            like.value = currentUserLike.rating;
+        if (story.images.length) {
+            outer.appendChild(photos);
         }
 
-        const likeButton = document.createElement("button");
-        likeButton.innerText = currentUserLike === undefined ? "Like" : `Already liked (${currentUserLike.rating})`;
-        likeButton.className = "btn btn-primary"
+        outer.appendChild(likesForm);
+        
+        sDiv.appendChild(outer);
+    }
+}
 
+function renderLikes(story) {
+    const form = document.createElement("form");
+    form.className = "form-inline";
+
+    const likesCount = document.createElement("span");
+    likesCount.className = "mr-2"
+    likesCount.innerText = `${story.likes.length} likes`;
+    likesCount.title = story.likes.map(like => `${like.user.username} (${like.rating})`).join("\n")
+
+    const currentUser = localStorage.getItem("username");
+    const currentUserLike = story.likes.find(like => like.user.username === currentUser);
+
+    const likeContainer = document.createElement("span");
+    likeContainer.className = "mr-2 d-inline"
+
+    const likeButton = document.createElement("button");
+    likeButton.innerText = currentUserLike === undefined ? "Like" : `Already liked (${currentUserLike.rating})`;
+    likeButton.className = "btn btn-primary"
+
+    const like = document.createElement("input");
+    like.className = "form-control"
+    like.disabled = currentUserLike !== undefined;
+    like.type = "number";
+    like.max = 5;
+    like.min = 0;
+
+    if (currentUserLike) {
+        like.value = currentUserLike.rating;
         // If already liked, disable button
-        if (currentUserLike) {
-            likeButton.disabled = true;
-        }
+        likeButton.disabled = true;
+    } else {
+        like.value = 5;
+    }
 
+    if (navigator.onLine) {
         // Handle liking
         likeButton.addEventListener("click", async e => {
             e.preventDefault();
@@ -130,27 +145,20 @@ function renderStories(stories) {
                 console.error(error);
             }
         });
-
-        outer.appendChild(by);
-        outer.appendChild(text);
-
-        if (story.images.length) {
-            outer.appendChild(photos);
-        }
-
-        form.appendChild(likesCount);
-
-        // Don't allow user to like own posts
-        if (currentUser !== story.author.username) {
-            likeContainer.appendChild(like)
-            form.appendChild(likeContainer);
-            form.appendChild(likeButton);
-        }
-
-        outer.appendChild(form)
-        
-        sDiv.appendChild(outer);
+    } else {
+        likeButton.disabled = true;
     }
+
+    form.appendChild(likesCount);
+
+    // Don't allow user to like own posts
+    if (currentUser !== story.author.username) {
+        likeContainer.appendChild(like)
+        form.appendChild(likeContainer);
+        form.appendChild(likeButton);
+    }
+
+    return form;
 }
 
 /**
