@@ -70,7 +70,7 @@ window.onload = async () => {
     let socket = io();
     socket.on('new-story', function (data) {
         let alertWindow = document.getElementById("alertWindow");
-        alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: ' + data.from + '.<a onClick="location.reload()" href=""><b><u> Click here to check it out!</u></b></a></div>'
+        alertWindow.innerHTML = '<div id="alertWindow" class="alert alert-primary" role="alert"> New story from: ' + data.from + '.<a onClick="refreshOtherUserStories()" href=""><b><u> Click here to check it out!</u></b></a></div>'
 
     });
 
