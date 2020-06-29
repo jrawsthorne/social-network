@@ -18,17 +18,20 @@ const data = require("./public/Data/usersStoriesAndRatings.json");
     const userIdMap = {};
     const storyIdMap = {};
 
+    // create all the users
     for (const user of data.users) {
         const u = await User.register(new User({ username: user.userId }), "password");
         userIdMap[user.userId] = u._id;
         console.log(`${user.userId} added`);
     }
 
+    // create all the stories
     for (const story of data.stories) {
         const p = await Story.create({ text: story.text, author: userIdMap[story.userId] });
         storyIdMap[story.storyId] = p._id;
     }
 
+    // create all the likes
     for (const user of data.users) {
         const dbUser = await User.findById(userIdMap[user.userId]).exec();
 
@@ -37,8 +40,8 @@ const data = require("./public/Data/usersStoriesAndRatings.json");
             const like = await Like.create({ story: story._id, user: dbUser._id, rating: rating.rating });
             await story.updateOne({ $push: { likes: { _id: like._id } } }).exec();
             await dbUser.updateOne({ $push: { likes: { _id: like._id } } }).exec();
+            console.log(`${rating.userId} rated ${rating.storyId} ${rating.rating}`);
         }
-        console.log(`${Math.min(10, user.ratings.length)} likes added for ${user.userId}`);
     }
 
     console.log("Done");

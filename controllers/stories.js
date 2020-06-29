@@ -24,9 +24,11 @@ const upload = multer({ storage: storage });
 // Define fields to be gathered from db
 const storyPopulate = { path: "author likes", select: "_id username rating", populate: { path: "user", select: "_id username" } };
 
-// @route GET /api/stories/latest
-// Get all stories not by user
-// SORTED: chronologically
+/**
+ * Get stories that were not created by the given user
+ * SORTED: chronologically
+ * @route GET /api/stories/latest
+ */
 async function getLatestStories(req, res) {
     try {
         let stories = await Story.find({ author: { $ne: req.user._id } }).sort({ createdAt: "desc" }).populate(storyPopulate).exec();
@@ -43,12 +45,16 @@ async function getLatestStories(req, res) {
     }
 }
 
-// @route GET /api/stories/:username
-// Get stories by user 
-// SORTED: chronologically
+/**
+ * Get stories that were created by the given user 
+ * SORTED: chronologically
+ * @route GET /api/stories/:username
+ */
 async function getUserStories(req, res) {
     try {
         let user = await User.find({ username: req.params.username }).exec();
+
+        // if the user was found by username the first item will be that user
         user = user[0];
         let stories = await Story.find({ author: user._id }).sort({ createdAt: "desc" }).populate(storyPopulate).exec();
 
@@ -62,11 +68,15 @@ async function getUserStories(req, res) {
     }
 }
 
-// @route POST /api/stories
-// Handles add story, uploads images
+/**
+ * Adds a story to the database with the authenticated user as the author
+ * Validation checks are run by mongoose to ensure data integrity
+ * @route POST /api/stories
+ */
 async function addStory(req, res) {
     try {
 
+        // multer provides an array of files that were uploaded
         const images = req.files.map(file => file.path);
 
         const story = await Story.create({ text: req.body.text, author: req.user._id, images });
@@ -88,8 +98,10 @@ async function addStory(req, res) {
 
 }
 
-// @route POST /api/stories/like/:storyId
-// Handles liking a story
+/**
+ * Handles liking a story
+ * @route POST /api/stories/like/:storyId
+ */
 async function like(req, res) {
 
     try {
@@ -103,7 +115,7 @@ async function like(req, res) {
             return res.status(404).json({ error: "No story found" });
         }
 
-        // Cannot like own story
+        // Prevent a user from liking their own story
         if (story.author === req.user._id) {
             return res.status(400).json({ error: "Can't like own story" });
         }
@@ -129,16 +141,18 @@ async function like(req, res) {
     }
 }
 
-// @route GET /api/stories/recommended
-// Get recommended stories for current user
-// SORTED: by recommendation
+/**
+ * Get recommended stories for current user by running the recommendation algorithm
+ * SORTED: by recommendation
+ * @route GET /api/stories/recommended
+ */
 async function getRecommendedStories(req, res) {
     try {
 
         // Get all users that have liked posts
         const allUsersWithLikes = await User.find().populate("likes", "-_id story rating").select("_id");
 
-        // format the data correctly for collaberative filtering
+        // format the data correctly for collaborative filtering
         const formattedLikes = {};
         for (const user of allUsersWithLikes) {
             formattedLikes[user._id] = user.likes.map(like => ({ [like.story]: like.rating }));
@@ -157,13 +171,14 @@ async function getRecommendedStories(req, res) {
             return obj
         }, {});
 
-        // Push stories
+        // Find all the recommended stories by their id
         const stories = await Story.find({
             _id: {
                 $in: recommendedStoryIds
             }
         }).populate(storyPopulate).exec();
 
+        // insert them in the correct order
         for (const story of stories) {
             storiesOrderedByScore[story._id] = story;
         }

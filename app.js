@@ -6,7 +6,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const session = require('express-session');
 const dotenv = require("dotenv");
 
-// Authentication:
+// Authentication: Initialise passport strategy
 const User = require("./models/User");
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -14,7 +14,7 @@ passport.deserializeUser(User.deserializeUser());
 
 const connectDB = require("./config/db");
 
-// Updated config.env to change db destination
+// Update config.env to change db destination
 dotenv.config({ path: "./config/config.env" });
 
 connectDB();
@@ -25,25 +25,27 @@ const auth = require("./routes/auth");
 const app = express();
 
 
-
+// log incoming requests
 app.use(logger("dev"));
+// add ability to parse json request body
 app.use(express.json());
-
+// initialise authentication middleware
 app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static('public'));
 
+// API routes
 app.use("/api/stories", stories);
 app.use("/api/auth", auth);
 
+// Static asset routes
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
-
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 
-// Define routes
+// Page routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/views/index.html`));
 });
@@ -73,8 +75,9 @@ var io = require('socket.io').listen(server);
 
 
 io.on('connection', async function (socket) {
+  // all users are notified when a new story is created
   socket.on('create-story', function (storyPackage) {
-    socket.broadcast.emit('new-story',{from:storyPackage.name});
+    socket.broadcast.emit('new-story', { from: storyPackage.name });
   });
 
 });
